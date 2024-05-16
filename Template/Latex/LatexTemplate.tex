@@ -1,0 +1,207 @@
+\documentclass[oneside,a4paper]{article}
+% \documentclass[twoside,a4paper]{article}
+
+% 编码相关.
+\usepackage[utf8]{inputenc} % 字符编码.
+\usepackage{ctex} % 支持中文.
+\usepackage{color, xcolor} % 颜色.
+
+% 目录标题引用.
+\usepackage{abstract} % 摘要.
+\usepackage[hidelinks]{hyperref} % 超链接[colorlinks, linkcolor=red, anchorcolor=blue, citecolor=green]
+\usepackage{authblk} % 使用\thanks定义通讯作者, 以及脚注的内容.
+\usepackage{titlesec} % 修改章节编号.
+\usepackage{cite} % 参考文献.
+\usepackage{appendix} % 附录.
+\usepackage[titles]{tocloft}
+
+% 排版相关.
+\usepackage{multicol} % 多列排版.
+\usepackage{fancyhdr} % 页眉页脚.
+\usepackage{listings} % 代码环境.
+\usepackage{graphicx, subfig} % 插图.
+\usepackage{float} % 浮动位置.
+\usepackage{enumerate} % 编号itemize.
+\usepackage{longtable} % 换页表格.
+\usepackage{multirow} % 单元格控制.
+\usepackage{makecell} % 单元格控制.
+\usepackage{tabularx} % 自动换行表格.
+\usepackage{array} % array.
+
+% 数学环境.
+\usepackage{amsfonts} % mathbb, mathfrak.
+\usepackage{eucal} % mathcal命令是欧拉书写体, mathscr.
+\usepackage{amsmath} % 定义多行公式环境和一系列排版数学公式的命令, 例如连分数\cfrac.
+\usepackage{amssymb} % 它定义了amsfonts宏包里msam和mabm字库中全部数学符号的命令.
+\usepackage{gensymb} % 数学符号补充.
+\usepackage{amsthm} % 定义proof环境, 能自动添加证毕符号, \newtheorem{定理环境名}{标题}[计数器名].
+\usepackage[ruled]{algorithm2e} % 算法环境包
+\usepackage{tikz} % 绘图.
+\usetikzlibrary{positioning}
+
+% 页面参数.
+\usepackage{geometry}
+% \geometry{a4paper,left=2cm,right=2cm,top=1cm,bottom=1cm}
+% \geometry{margin=1.5cm, vmargin={0pt,1cm}}
+% \geometry{hmargin={3.18cm, 3.18cm}, width=14.64cm, vmargin={2.54cm, 2.54cm}, height=24.62cm}
+% \setlength{\topmargin}{-1cm}
+% \setlength{\paperheight}{29.7cm}
+% \setlength{\textheight}{25.3cm}
+% \setlength{\headheight}{15pt}
+
+% \pagestyle{empty} % 没有页眉和页脚
+\pagestyle{fancy} % 一般格式
+% \pagestyle{plain} % 没有页眉, 页脚中部放置页码.
+% \pagestyle{headings} % 没有页脚, 页眉包含章节的标题和页码.
+% \pagestyle{myheadings} % 没有页脚, 页眉页码和使用者所定义的信息.
+% \fancyhead{}
+% \lhead{lhead}
+% \chead{chead}
+% \rhead{rhead}
+
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{2}
+
+\title{标题}
+\author{姓名 \quad 学号 \quad 专业}
+\date{\today}
+
+\lstset{
+    columns=fixed,
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    frame=single,
+    backgroundcolor=\color[RGB]{245,245,244},
+    keywordstyle=\color[RGB]{40,40,255},
+    numberstyle=\footnotesize\color{darkgray},
+    commentstyle=\it\color[RGB]{0,96,96},
+    stringstyle=\rmfamily\slshape\color[RGB]{128,0,0},
+    showstringspaces=false,
+    language={Python},
+    breaklines
+}
+
+% \renewcommand{\cftpartleader}{\cftdotfill{\cftdotsep}} % 给 parts 加点
+% \renewcommand{\cftchapleader}{\cftdotfill{\cftdotsep}} % 给 chapters 加点
+% \renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}} % 给 sections加点
+
+% \renewcommand\thesection{\left\little\textbf{第\Roman{section}题 (6分)}}
+% \renewcommand\thesubsection{\Roman{section}-\alph{subsection}.}
+
+% \renewcommand\theequation{\arabic{section}.\arabic{equation}}
+
+% \newcommand{\diff}{\mathop{}\!\mathrm{d}}
+% \DeclareMathOperator{\st}{s.t.}
+% \renewcommand{\proofname}{证明}
+
+% \newtheorem{theorem}{定理}[section]
+% \newtheorem{definition}[theorem]{定义}
+% \newtheorem{example}[theorem]{例}
+% \newtheorem{notation}[theorem]{符号}
+% \newtheorem{axiom}[theorem]{公理}
+% \newtheorem{corollary}[theorem]{推论}
+% \newtheorem{remark}[theorem]{备注}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+\thispagestyle{empty}
+\setcounter{page}{0}
+\setcounter{section}{0}
+
+\newpage
+
+\section{section}
+
+\subsection{subsection}
+
+\subsubsection{subsubsection}
+
+\indent 参考文献\cite{attene2010lightweight}.
+
+\begin{multicols}{3}
+    构造实体几何(CSG)法在建筑、雕塑等领域有着广泛应用,其主要思想是:通过简单实体的布尔运算来构造复杂实体。这里的简单实体也被称为基元,指的是长方体、球体、圆柱体等可以被参数化的实体,通过求并、求交等布尔运算以及平移、旋转等几何变换,可以通过基元构造各种复杂实体(如图1.1所示)。由于基元可以在计算机中被精确描述,因此通过这些基元表示的复杂实体也可以被精确描述。这些优势使得构造实体几何法被广泛应用于建筑、雕塑等艺术领域以及需要高精度建模的场合。除此之外,构造实体几何法的另一个优点在于便于判断任意点是否在实体的内部,这在光线追踪等应用中非常重要。但是另一方面,构造实体几何法并不直接包括物体的面、边、顶点等边界信息,甚至无法保证实体的连通性和存在性,因此难以直接应用于对模型的几何和拓扑性质有严格要求的领域。
+    % \begin{figure}
+    %     \includegraphics[width=0.3\textwidth]{figure.png}
+    %     \caption{检测孔洞}
+    % \end{figure}
+    % \begin{figure}
+    %     \includegraphics[width=0.3\textwidth]{figure.png}
+    %     \caption{拟合曲面}
+    % \end{figure}
+    % \begin{figure}
+    %     \includegraphics[width=0.3\textwidth]{figure.png}
+    %     \caption{优化顶点}
+    % \end{figure}
+\end{multicols}
+
+\begin{table}[!htbp]
+    \centering
+    \label{table1}
+    \caption{进度安排}
+    \begin{tabular}{|l|l|}
+        \hline
+        \multicolumn{2}{|c|}{计划} \\
+        \hline
+        3月1日-3月10日 & 学习三维殷集理论和现有的模型修补算法 \\
+        \hline
+        3月10日-4月1日 & 在现有理论的基础上设计三维殷集修补算法 \\
+        \hline
+        4月1日-4月20日 & 用C++完成算法的实现 \\
+        \hline
+        4月20日-5月1日 & 撰写毕业论文 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{figure.png}
+    \caption{caption.}
+    \label{fig_1}
+\end{figure}
+
+\begin{figure*}[!htbp]
+    \centering
+    \subfloat[figure1 caption]{
+        \includegraphics[width=0.45\textwidth]{figure.png}
+        \label{fig_first_case}}
+    \hfil
+    \subfloat[figure2 caption]{
+        \includegraphics[width=0.45\textwidth]{figure.png}
+        \label{fig_second_case}}
+    \caption{caption.}
+    \label{fig_sim_0}
+\end{figure*}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.45\textwidth]{figure.png}
+    \caption{caption.}
+    \label{fig_sim_1}
+\end{figure}
+
+\newpage
+\bibliographystyle{unsrt}
+% plain 按字母的顺序排列, 比较次序为作者、年度和标题.
+% unsrt 样式同plain, 只是按照引用的先后排序.
+% abbrv 类似plain, 将月份全拼改为缩写, 更显紧凑.
+% ieeetr 国际电气电子工程师协会期刊样式.
+% acm 美国计算机学会期刊样式.
+% siam 美国工业和应用数学学会期刊样式.
+\bibliography{reference}
+
+\newpage
+
+\appendix
+\renewcommand\thesection{\Alph{section}}
+
+\section{附录}
+
+\begin{lstlisting}
+    codes
+\end{lstlisting}
+
+\end{document}

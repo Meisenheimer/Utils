@@ -1,0 +1,91 @@
+
+\section{section}
+
+\subsection{subsection}
+
+\subsubsection{subsubsection}
+
+\indent 参考文献\cite{attene2010lightweight}.
+
+\begin{multicols}{3}
+    构造实体几何(CSG)法在建筑、雕塑等领域有着广泛应用,其主要思想是:通过简单实体的布尔运算来构造复杂实体。这里的简单实体也被称为基元,指的是长方体、球体、圆柱体等可以被参数化的实体,通过求并、求交等布尔运算以及平移、旋转等几何变换,可以通过基元构造各种复杂实体(如图1.1所示)。由于基元可以在计算机中被精确描述,因此通过这些基元表示的复杂实体也可以被精确描述。这些优势使得构造实体几何法被广泛应用于建筑、雕塑等艺术领域以及需要高精度建模的场合。除此之外,构造实体几何法的另一个优点在于便于判断任意点是否在实体的内部,这在光线追踪等应用中非常重要。但是另一方面,构造实体几何法并不直接包括物体的面、边、顶点等边界信息,甚至无法保证实体的连通性和存在性,因此难以直接应用于对模型的几何和拓扑性质有严格要求的领域。
+    % \begin{figure}
+    %     \includegraphics[width=0.3\textwidth]{figure.png}
+    %     \caption{检测孔洞}
+    % \end{figure}
+    % \begin{figure}
+    %     \includegraphics[width=0.3\textwidth]{figure.png}
+    %     \caption{拟合曲面}
+    % \end{figure}
+    % \begin{figure}
+    %     \includegraphics[width=0.3\textwidth]{figure.png}
+    %     \caption{优化顶点}
+    % \end{figure}
+\end{multicols}
+
+\begin{table}[!htbp]
+    \centering
+    \label{table1}
+    \caption{进度安排}
+    \begin{tabular}{|l|l|}
+        \hline
+        \multicolumn{2}{|c|}{计划} \\
+        \hline
+        3月1日-3月10日 & 学习三维殷集理论和现有的模型修补算法 \\
+        \hline
+        3月10日-4月1日 & 在现有理论的基础上设计三维殷集修补算法 \\
+        \hline
+        4月1日-4月20日 & 用C++完成算法的实现 \\
+        \hline
+        4月20日-5月1日 & 撰写毕业论文 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{figure.png}
+    \caption{caption.}
+    \label{fig_1}
+\end{figure}
+
+\begin{figure*}[!htbp]
+    \centering
+    \subfloat[figure1 caption]{
+        \includegraphics[width=0.45\textwidth]{figure.png}
+        \label{fig_first_case}}
+    \hfil
+    \subfloat[figure2 caption]{
+        \includegraphics[width=0.45\textwidth]{figure.png}
+        \label{fig_second_case}}
+    \caption{caption.}
+    \label{fig_sim_0}
+\end{figure*}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.45\textwidth]{figure.png}
+    \caption{caption.}
+    \label{fig_sim_1}
+\end{figure}
+
+\newpage
+\bibliographystyle{unsrt}
+% plain 按字母的顺序排列, 比较次序为作者、年度和标题.
+% unsrt 样式同plain, 只是按照引用的先后排序.
+% abbrv 类似plain, 将月份全拼改为缩写, 更显紧凑.
+% ieeetr 国际电气电子工程师协会期刊样式.
+% acm 美国计算机学会期刊样式.
+% siam 美国工业和应用数学学会期刊样式.
+\bibliography{reference}
+
+\newpage
+
+\appendix
+\renewcommand\thesection{\Alph{section}}
+
+\section{附录}
+
+\begin{lstlisting}
+    codes
+\end{lstlisting}

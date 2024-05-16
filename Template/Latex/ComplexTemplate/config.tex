@@ -1,0 +1,61 @@
+\documentclass[oneside,a4paper]{article}
+% \documentclass[twoside,a4paper]{article}
+
+% 编码相关.
+\usepackage[utf8]{inputenc} % 字符编码.
+\usepackage{ctex} % 支持中文.
+\usepackage{color, xcolor} % 颜色.
+
+% 目录标题引用.
+\usepackage{abstract} % 摘要.
+\usepackage[hidelinks]{hyperref} % 超链接[colorlinks, linkcolor=red, anchorcolor=blue, citecolor=green]
+\usepackage{authblk} % 使用\thanks定义通讯作者, 以及脚注的内容.
+\usepackage{titlesec} % 修改章节编号.
+\usepackage{cite} % 参考文献.
+\usepackage{appendix} % 附录.
+
+% 排版相关.
+\usepackage{multicol} % 多列排版.
+\usepackage{fancyhdr} % 页眉页脚.
+\usepackage{listings} % 代码环境.
+\usepackage{graphicx, subfig} % 插图.
+\usepackage{float} % 浮动位置.
+\usepackage{enumerate} % 编号itemize.
+
+% 数学环境.
+\usepackage{amsfonts} % mathbb, mathfrak.
+\usepackage{eucal} % mathcal命令是欧拉书写体, mathscr.
+\usepackage{amsmath} % 定义多行公式环境和一系列排版数学公式的命令, 例如连分数\cfrac.
+\usepackage{amssymb} % 它定义了amsfonts宏包里msam和mabm字库中全部数学符号的命令.
+\usepackage{gensymb} % 数学符号补充.
+\usepackage{amsthm} % 定义proof环境, 能自动添加证毕符号, \newtheorem{定理环境名}{标题}[计数器名].
+\usepackage[ruled]{algorithm2e} % 算法环境包
+\usepackage{tikz} % 绘图.
+\usetikzlibrary{positioning}
+
+% 页面参数.
+\usepackage{geometry}
+% \geometry{a4paper,left=2cm,right=2cm,top=1cm,bottom=1cm}
+% \geometry{margin=1.5cm, vmargin={0pt,1cm}}
+% \geometry{hmargin={3.18cm, 3.18cm}, width=14.64cm, vmargin={2.54cm, 2.54cm}, height=24.62cm}
+% \setlength{\topmargin}{-1cm}
+% \setlength{\paperheight}{29.7cm}
+% \setlength{\textheight}{25.3cm}
+% \setlength{\headheight}{15pt}
+
+% \pagestyle{empty} % 没有页眉和页脚
+\pagestyle{fancy} % 一般格式
+% \pagestyle{plain} % 没有页眉, 页脚中部放置页码.
+% \pagestyle{headings} % 没有页脚, 页眉包含章节的标题和页码.
+% \pagestyle{myheadings} % 没有页脚, 页眉页码和使用者所定义的信息.
+% \fancyhead{}
+% \lhead{lhead}
+% \chead{chead}
+% \rhead{rhead}
+
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{2}
+
+\title{标题}
+\author{姓名 \quad 学号 \quad 专业}
+\date{\today}
