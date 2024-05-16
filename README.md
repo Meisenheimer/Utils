@@ -2,13 +2,12 @@
 
 ## 介绍/Introduction
 
-这一项目中包括了我写的简历（./CV/）、Latex和Typst模板（./Template/）以及一些程序（你可以在程序目录中找到相关说明）。
-This repository contains my CV, some template (for LaTeX and Typst) and some programs (you can find introductions (chinese only) in the directory).
+这一项目中包括了我写的Latex和Typst模板（./Template/）以及一些程序（你可以在程序目录中找到相关说明）。
+This repository contains some template (for LaTeX and Typst) and some programs (you can find introductions (chinese only) in the directory).
 
 以下为简要说明：
 Followings are introductions:
 
-- ./CV/ 基于Typst的个人简历。 A curriculum vitae based on Typst.
 - ./Template/ LaTeX和Typst模板。 Templates for LaTeX and Typst
 - ./CGviewer/ 一个实验性质的Qt安卓项目。 A experimental project fot Qt for android.
 - ./encode/ 一个基于Qt的加密/解密程序。 A encode/decode program based on Qt.
