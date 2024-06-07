@@ -193,16 +193,27 @@
     set text(size: normal-size, weight: "bold")
     set par(first-line-indent: 0pt)
     if it.level == 1 {
-      pagebreak(weak: true)
-      counter("env").update(counter(heading).get())
-      set text(size: huge-size)
-      v(Huge-size, weak: true)
-      "Chapter "
-      number
-      "\n"
-      v(Huge-size, weak: true)
-      it.body
-      v(Huge-size, weak: true)
+      if language == "cn" {
+        pagebreak(weak: true)
+        counter("env").update(counter(heading).get())
+        set text(size: huge-size)
+        v(Huge-size, weak: true)
+        number
+        it.body
+        v(Huge-size, weak: true)
+      }
+      if language == "en" {
+        pagebreak(weak: true)
+        counter("env").update(counter(heading).get())
+        set text(size: huge-size)
+        v(Huge-size, weak: true)
+        "Chapter "
+        number
+        "\n"
+        v(Huge-size, weak: true)
+        it.body
+        v(Huge-size, weak: true)
+      }
     } else if it.level == 2 {
       set text(size: LARGE-size)
       v(LARGE-size, weak: true)
