@@ -128,7 +128,9 @@
     ..authors_parsed.authors.map(author => align(center)[
       #set text(size: Large-size)
       #author.name
-      #footnote[Email: #link("mailto:" + authors_parsed.corresponding.email, authors_parsed.corresponding.email)] \
+      #if author.email != none [
+        #footnote[Email: #link("mailto:" + authors_parsed.corresponding.email, authors_parsed.corresponding.email)] \
+      ]
       #if author.institude != none [
         #set text(size: large-size)
         #author.institude
