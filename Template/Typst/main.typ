@@ -1,8 +1,10 @@
-#import "book.typ": *
+#import "config.typ": *
 
 #show: project.with(
+  // doctype: "article",
+  doctype: "book",
   title: "A Title is all you need",
-  language: "cn",
+  language: "en",
   show_outline: true,
   subtitle: none,
   authors: (
@@ -15,6 +17,7 @@
   ),
   abstract: [Title of a scientific paper is an important element that conveys the main message of the study to the readers. In this study, we investigate the impact of paper titles on citation count, and propose that the title alone has the highest impact on citation count. Using a dataset of 1000 scientific papers from various disciplines, we analyzed the correlation between the characteristics of paper titles, such as length, clarity, novelty, and citation count. Our results show that papers with clear, concise, and novel titles tend to receive more citations than those with longer or less informative titles. Moreover, we found that papers with creative and attention-grabbing titles tend to attract more readers and citations, which supports our hypothesis that the title alone has the highest impact on citation count. Our findings suggest that researchers should pay more attention to crafting effective titles that accurately and creatively summarize the main message of their research, as it can have a significant impact on the success and visibility of their work.],
   keywords: [content analysis, citation, bibliometrics],
+  preface: [this is a preface.],
   bibliography_path: "reference.bib",
 )
 
@@ -154,5 +157,14 @@ significant impact on the success and visibility of their work.
 == subsection
 
 === subsubection
+
+= Introduction
+
+= Introduction
+
+= Introduction
+
+= Introduction
+
 
 The authors report there are no competing interests to declare.

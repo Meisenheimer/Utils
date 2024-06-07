@@ -187,7 +187,7 @@
   set page(numbering: "i")
   set enum(numbering: "(1)", indent: 2em)
   set list(indent: 2em)
-  
+
   set heading(numbering: "1.1 ")
   show heading: it => {
     let number = if it.numbering != none {
