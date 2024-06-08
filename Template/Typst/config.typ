@@ -14,6 +14,9 @@
 #let FontItalic = ("New Computer Modern", "KaiTi")
 // "New Computer Modern", "Latin Modern Math", "Linux Libertine", "TeX Gyre Termes"
 
+#let DocType = state("DocType", "")
+#let Language = state("Language", "")
+
 #let project(
   doctype: "article", // article, book.
   papersize: "a4", // 21(cm) * 29.7(cm)
@@ -58,6 +61,9 @@
   )
   set text(font: fontfamily, lang: language, size: normal-size)
   show par: set block(above: 0.58em, below: 0.58em)
+
+  DocType.update(doctype)
+  Language.update(language)
 
   show heading: it => {
     set text(size: normal-size, weight: "bold")
@@ -401,6 +407,90 @@
     show bibliography: set block(spacing: 0.58em)
     show bibliography: set par(first-line-indent: 0em)
   }
+}
+
+#let head(title, depth: 1) = {
+  show heading: it => {
+    set text(size: normal-size, weight: "bold")
+    set par(first-line-indent: 0pt)
+    if it.level == 1 {
+      if DocType.get() == "article" {
+        set text(size: LARGE-size)
+        v(LARGE-size, weak: true)
+        it.body
+        v(normal-size, weak: true)
+      }
+      if DocType.get() == "book" {
+        if Language.get() == "cn" {
+          pagebreak(weak: true)
+          set text(size: huge-size)
+          v(Huge-size, weak: true)
+          set align(center)
+          it.body
+          v(Huge-size, weak: true)
+        }
+        if Language.get() == "en" {
+          pagebreak(weak: true)
+          set text(size: huge-size)
+          v(Huge-size, weak: true)
+          it.body
+          v(Huge-size, weak: true)
+        }
+      }
+    } else if it.level == 2 {
+      if DocType.get() == "article" {
+        set text(size: Large-size)
+        v(Large-size, weak: true)
+        it.body
+        v(normal-size, weak: true)
+      }
+      if DocType.get() == "book" {
+        set text(size: LARGE-size)
+        v(LARGE-size, weak: true)
+        it.body
+        v(normal-size, weak: true)
+      }
+    } else if it.level == 3 {
+      if DocType.get() == "article" {
+        set text(size: large-size)
+        v(large-size, weak: true)
+        it.body
+        v(normal-size, weak: true)
+      }
+      if DocType.get() == "book" {
+        set text(size: Large-size)
+        v(Large-size, weak: true)
+        it.body
+        v(normal-size, weak: true)
+      }
+    } else if it.level == 4 {
+      if DocType.get() == "article" {
+        set text(size: nromal-size)
+        v(normal-size, weak: true)
+        it.body
+        v(normal-size, weak: true)
+      }
+      if DocType.get() == "book" {
+        set text(size: large-size)
+        v(large-size, weak: true)
+        it.body
+        v(normal-size, weak: true)
+      }
+    } else {
+      set text(size: normal-size)
+      v(normal-size, weak: true)
+      it.body
+      v(normal-size, weak: true)
+    }
+  }
+  heading(
+    level: auto,
+    depth: depth,
+    numbering: none,
+    supplement: none,
+    outlined: true,
+    bookmarked: true,
+    title)
 }
 
 #let part(title) = {
