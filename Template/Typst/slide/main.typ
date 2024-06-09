@@ -21,3 +21,11 @@
   body body body body body body body body body body body body body body body body body body body body
 
 ]
+
+#frame("")[
+  #align(center + horizon)[
+    #set text(size: FontSize.at("title"))
+    感谢各位聆听 \
+    请批评指正
+  ]
+]

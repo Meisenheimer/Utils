@@ -70,7 +70,7 @@
       // #move(dx: 0cm, dy: -Height / 15)[
       #move(dx: 0cm, dy: -Height * 23 / 240)[
         #box(
-          align(right + horizon)[#text(size: FontSize.at("footer"), counter(page).display(), fill: Color.at("title"))],
+          align(right + horizon)[#text(size: FontSize.at("footer"), counter(page).display("1 / 1", both: true), fill: Color.at("title"))],
           height: 7 * Height / 240,
           width: 63 * Width / 64,
         )
@@ -224,21 +224,6 @@
   counter(page).update(1)
   set par(justify: true, first-line-indent: 2em)
   body
-
-
-  // Thanks page
-  set page(header: context [], footer: context [])
-  pagebreak(weak: false)
-  set text(size: FontSize.at("title"))
-  align(center + horizon)[
-    #if language == "en" [
-      Thank you for listening
-    ]
-    #if language == "zh" [
-      感谢各位聆听 \
-      请批评指正
-    ]
-  ]
 }
 
 #let frame(title, body) = {
