@@ -22,7 +22,7 @@ inline void parseArgs(const int argc, const char *argv[])
     base_dir = argv[1];
     main_file = argv[2];
     target_file = argv[3];
-    opts = INIT_OPTS ? String(" -O2 -fopenmp -Wall -Wextra -static -std=c++17") : String("");
+    opts = INIT_OPTS ? String(" -O2 -fopenmp -Wall -Wextra -static -std=c++20") : String("");
     for (Integer i = 4; i < argc; i++)
     {
         opts += " " + String(argv[i]);
