@@ -18,12 +18,20 @@ void writeFileInfo(const std::vector<FileInfo> &list)
         std::cout << std::endl;
     }
     FILE *fp = fopen("Makefile", "w");
-    fprintf(fp, "%s: Makefile", main_file.c_str());
+    String main_name = splitExtension(main_file).first;
+    fprintf(fp, "%s: Makefile", main_name.c_str());
     for (Integer i = 0; i < (Integer)list.size(); i++)
     {
         if (SOURCE_EXTENSION.find(list[i].filename.second) != SOURCE_EXTENSION.end())
         {
-            fprintf(fp, " %s.o", list[i].filename.first.c_str());
+            if (list[i].filename.first == main_name)
+            {
+                fprintf(fp, " %s.cpp", list[i].filename.first.c_str());
+            }
+            else
+            {
+                fprintf(fp, " %s.o", list[i].filename.first.c_str());
+            }
         }
     }
     fprintf(fp, "\n\tg++");
@@ -31,14 +39,22 @@ void writeFileInfo(const std::vector<FileInfo> &list)
     {
         if (SOURCE_EXTENSION.find(list[i].filename.second) != SOURCE_EXTENSION.end())
         {
-            fprintf(fp, " %s.o", list[i].filename.first.c_str());
+            if (list[i].filename.first == main_name)
+            {
+                fprintf(fp, " %s.cpp", list[i].filename.first.c_str());
+            }
+            else
+            {
+                fprintf(fp, " %s.o", list[i].filename.first.c_str());
+            }
         }
     }
     fprintf(fp, " -o %s%s\n\n", target_file.c_str(), opts.c_str());
 
     for (Integer i = 0; i < (Integer)list.size(); i++)
     {
-        if (SOURCE_EXTENSION.find(list[i].filename.second) != SOURCE_EXTENSION.end())
+        if (SOURCE_EXTENSION.find(list[i].filename.second) != SOURCE_EXTENSION.end() &&
+            list[i].filename.first != main_name)
         {
             const String source = list[i].filename.first + list[i].filename.second;
             const String target = list[i].filename.first + ".o";
