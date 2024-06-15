@@ -22,12 +22,10 @@ void print();
 int main()
 {
     Bool flag = true;
-    initgraph(WIDTH, HEIGHT, SHOWCONSOLE);
-    setorigin(WIDTH / 2, HEIGHT / 2);
-    setaspectratio(1, -1);
-    setbkcolor(RGB(51, 51, 51));
-    settextcolor(RGB(255, 255, 255));
-    setfillcolor(RGB(204, 204, 204));
+    initgraph(WIDTH, HEIGHT, INIT_RENDERMANUAL);
+    setbkcolor(EGERGB(51, 51, 51));
+    settextcolor(EGERGB(255, 255, 255));
+    setfillcolor(EGERGB(204, 204, 204));
     while (flag)
     {
         char c;
@@ -62,28 +60,27 @@ int main()
 inline void display()
 {
     print();
-    BeginBatchDraw();
     cleardevice();
 
-    setlinecolor(RGB(85, 85, 85));
+    setlinecolor(EGERGB(85, 85, 85));
     setlinestyle(PS_SOLID, 1);
     for (Integer i = -std::max(HEIGHT, WIDTH) / 2; i <= std::max(HEIGHT, WIDTH) / 2; i += SCALE)
     {
-        line(-WIDTH, i, WIDTH, i);
-        line(i, HEIGHT, i, -HEIGHT);
+        line(0, HEIGHT / 2 + i, WIDTH, HEIGHT / 2 + i);
+        line(WIDTH / 2 + i, 0, WIDTH / 2 + i, HEIGHT);
     }
 
-    setlinecolor(RGB(170, 170, 170));
+    setlinecolor(EGERGB(170, 170, 170));
     setlinestyle(PS_SOLID, 2);
-    line(-WIDTH, 0, WIDTH, 0);
-    line(0, HEIGHT, 0, -HEIGHT);
+    line(0, HEIGHT / 2, WIDTH, HEIGHT / 2);
+    line(WIDTH / 2, 0, WIDTH / 2, HEIGHT);
 
-    setlinecolor(RGB(0, 0, 255));
+    setlinecolor(EGERGB(0, 0, 255));
     setlinestyle(PS_SOLID, 2);
-    fillcircle(start(0) * SCALE, start(1) * SCALE, BALL_RADIUS * SCALE);
-    fillcircle(target(0) * SCALE, target(1) * SCALE, DAMAGE_RADIUS * SCALE);
+    fillcircle(WIDTH / 2 + start(0) * SCALE, HEIGHT / 2 - start(1) * SCALE, BALL_RADIUS * SCALE);
+    fillcircle(WIDTH / 2 + target(0) * SCALE, HEIGHT / 2 - target(1) * SCALE, DAMAGE_RADIUS * SCALE);
 
-    setlinecolor(RGB(0, 255, 0));
+    setlinecolor(EGERGB(0, 255, 0));
     setlinestyle(PS_SOLID | PS_ENDCAP_FLAT, 2);
     for (Integer i = 0; i < (Integer)curves.size(); i++)
     {
@@ -92,11 +89,11 @@ inline void display()
         Real x2 = x1 + step;
         for (Integer k = 0; k < STEP; k++)
         {
-            line((Integer)SCALE * x1, (Integer)SCALE * curves[i](x1), (Integer)SCALE * x2, (Integer)SCALE * curves[i](x2));
+            line(WIDTH / 2 + (Integer)SCALE * x1, HEIGHT / 2 - (Integer)SCALE * curves[i](x1), WIDTH / 2 + (Integer)SCALE * x2, HEIGHT / 2 - (Integer)SCALE * curves[i](x2));
             x1 = x2, x2 += step;
         }
     }
-    setlinecolor(RGB(255, 0, 0));
+    setlinecolor(EGERGB(255, 0, 0));
     setlinestyle(PS_SOLID | PS_ENDCAP_FLAT, 2);
     for (Integer i = 0; i < (Integer)point.size(); i++)
     {
@@ -110,7 +107,7 @@ inline void display()
         Real x2 = x1 + step;
         for (Integer k = 0; k < STEP; k++)
         {
-            line((Integer)SCALE * x1, (Integer)SCALE * c(x1), (Integer)SCALE * x2, (Integer)SCALE * c(x2));
+            line(WIDTH / 2 + (Integer)SCALE * x1, HEIGHT / 2 - (Integer)SCALE * c(x1), WIDTH / 2 + (Integer)SCALE * x2, HEIGHT / 2 - (Integer)SCALE * c(x2));
             x1 = x2, x2 += step;
         }
     }
@@ -118,9 +115,9 @@ inline void display()
     {
         Integer x = (Integer)(SCALE * cubes[i](0));
         Integer y = (Integer)(SCALE * cubes[i](1));
-        solidrectangle(x - SCALE / 2, y + SCALE / 2, x + SCALE / 2, y - SCALE / 2);
+        solidrect(WIDTH / 2 + x - SCALE / 2, HEIGHT / 2 - y - SCALE / 2, WIDTH / 2 + x + SCALE / 2, HEIGHT / 2 - y + SCALE / 2);
     }
-    EndBatchDraw();
+    delay_ms(0);
     return;
 }
 
