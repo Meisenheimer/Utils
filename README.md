@@ -13,6 +13,7 @@ Followings are introductions:
 - ./encode/ 一个基于Qt的加密/解密程序。 A encode/decode program based on Qt.
 - ./Gomoku/ 一个基于EasyX的五子棋框架，用于决策程序测试。 A strategy test program for gomoku based on EasyX.
 - ./makemake/ 一个自动化生成Makefile的程序。 A program for creating the Makefile.
+- ./PoissonEquation/ 二维矩形区域上的Poisson方程多重网格求解器。A 2D poisson equation solver by multigrid method over rectangle region.
 - ./qv/ 一个类似Dos系统下qv的文件编辑器。 A editor similar to qv in Dos system.
 - ./SceneEditor/ 一个基于Qt，用于生成并修改Json格式对话场景的程序。 A program based on Qt to generate and modify dialog scenes in Json format .
 - ./Throw/ 一个计算存在障碍的情形下两点间抛物线的程序。 A program to compute a parabola between two points with the presence of an obstacle.
