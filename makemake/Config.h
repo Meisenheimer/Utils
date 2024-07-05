@@ -1,31 +1,35 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
+#include <cassert>
 #include <vector>
 #include <string>
 
 #define MW_ALERT printf("%s %d\n", __FILE__, __LINE__);
+#define MW_ERROR                                  \
+    printf("Error: %s %d\n", __FILE__, __LINE__); \
+    exit(0);
 
-using Bool = bool;
-using Integer = long int;
-using Real = double;
-using String = std::string;
+inline const std::string DEFAULT_OPTS = " -O2 -fopenmp -Wall -Wextra -static -std=c++20";
+inline const std::set<std::string> HEADER_EXTENSION = {".h", ".hh", ".hpp", ".hxx"};
+inline const std::set<std::string> SOURCE_EXTENSION = {".c", ".cc", ".cpp", ".cxx"};
+inline const std::set<std::string> ALL_EXTENSION = []() -> std::set<std::string>
+{
+    std::set<std::string> res;
+    res.insert(HEADER_EXTENSION.begin(), HEADER_EXTENSION.end());
+    res.insert(SOURCE_EXTENSION.begin(), SOURCE_EXTENSION.end());
+    return res;
+}();
 
-constexpr Bool INIT_OPTS = true;
+inline std::string base_dir;
+inline std::string main_file;
+inline std::string target_file;
+inline std::string opts;
 
-inline const std::set<String> HEADER_EXTENSION = {".h", ".hpp"};
-inline const std::set<String> SOURCE_EXTENSION = {".c", ".cpp"};
-inline const std::set<String> EXTENSION = {".c", ".cpp", ".h", ".hpp"};
-
-inline String base_dir;
-inline String main_file;
-inline String target_file;
-inline String opts;
-
-inline const std::pair<String, String> splitExtension(const String &filename)
+inline const std::pair<std::string, std::string> splitExtension(const std::string &filename)
 {
     const std::size_t index = filename.find_last_of('.');
-    return std::make_pair(filename.substr(0, index), (index == String::npos ? "" : filename.substr(index)));
+    return std::make_pair(filename.substr(0, index), (index == std::string::npos ? "" : filename.substr(index)));
 }
 
 #endif

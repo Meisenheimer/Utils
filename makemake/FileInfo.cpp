@@ -1,163 +1,219 @@
 #include <iostream>
-#include <queue>
 #include <fstream>
+#include <dirent.h>
 
 #include "FileInfo.h"
-#include "Path.h"
 
-void writeFileInfo(const std::vector<FileInfo> &list)
+std::set<std::string> source;
+std::map<std::string, std::set<std::string>> include;
+
+std::set<std::string> findFile(const std::string &name, const std::set<std::string> &extension, const std::string &path)
 {
-    std::cout << std::endl;
-    for (Integer i = 0; i < (Integer)list.size(); i++)
+    std::set<std::string> list;
+    DIR *dp;
+    struct dirent *entry;
+    if ((dp = opendir(path.c_str())) != NULL)
     {
-        std::cout << list[i].filename.first << " " << list[i].filename.second << std::endl;
-        for (auto it = list[i].dependence.begin(); it != list[i].dependence.end(); it++)
+        while ((entry = readdir(dp)) != NULL)
         {
-            std::cout << "  --" << *it;
-        }
-        std::cout << std::endl;
-    }
-    FILE *fp = fopen("Makefile", "w");
-    String main_name = splitExtension(main_file).first;
-    fprintf(fp, "%s: Makefile", main_name.c_str());
-    for (Integer i = 0; i < (Integer)list.size(); i++)
-    {
-        if (SOURCE_EXTENSION.find(list[i].filename.second) != SOURCE_EXTENSION.end())
-        {
-            if (list[i].filename.first == main_name)
+            const std::string filename = entry->d_name;
+            bool flag = true;
+            if (extension.size() > 0)
             {
-                fprintf(fp, " %s.cpp", list[i].filename.first.c_str());
+                const std::pair<std::string, std::string> split = splitExtension(filename);
+                flag = false;
+                if (name == split.first && extension.contains(split.second))
+                {
+                    flag = true;
+                }
             }
-            else
+            if (flag)
             {
-                fprintf(fp, " %s.o", list[i].filename.first.c_str());
+                list.insert(std::string(filename));
             }
         }
+        closedir(dp);
     }
-    fprintf(fp, "\n\tg++");
-    for (Integer i = 0; i < (Integer)list.size(); i++)
-    {
-        if (SOURCE_EXTENSION.find(list[i].filename.second) != SOURCE_EXTENSION.end())
-        {
-            if (list[i].filename.first == main_name)
-            {
-                fprintf(fp, " %s.cpp", list[i].filename.first.c_str());
-            }
-            else
-            {
-                fprintf(fp, " %s.o", list[i].filename.first.c_str());
-            }
-        }
-    }
-    fprintf(fp, " -o %s%s\n\n", target_file.c_str(), opts.c_str());
+    return list;
+}
 
-    for (Integer i = 0; i < (Integer)list.size(); i++)
+std::set<std::string> listdir(const std::set<std::string> &extension, const std::string &path)
+{
+    std::set<std::string> list;
+    DIR *dp;
+    struct dirent *entry;
+    if ((dp = opendir(path.c_str())) != NULL)
     {
-        if (SOURCE_EXTENSION.find(list[i].filename.second) != SOURCE_EXTENSION.end() &&
-            list[i].filename.first != main_name)
+        while ((entry = readdir(dp)) != NULL)
         {
-            const String source = list[i].filename.first + list[i].filename.second;
-            const String target = list[i].filename.first + ".o";
-            fprintf(fp, "%s: Makefile %s", target.c_str(), list[i].fullname.c_str());
-            for (auto it = list[i].dependence.begin(); it != list[i].dependence.end(); it++)
+            bool flag = true;
+            if (extension.size() > 0)
             {
-                fprintf(fp, " %s", it->c_str());
+                const std::string ext = splitExtension(entry->d_name).second;
+                flag = false;
+                if (extension.find(ext) != extension.end())
+                {
+                    flag = true;
+                }
             }
-            fprintf(fp, "\n\tg++ -c %s -o %s%s\n\n", source.c_str(), target.c_str(), opts.c_str());
+            if (flag)
+            {
+                list.insert(std::string(entry->d_name));
+            }
+        }
+        closedir(dp);
+    }
+    return list;
+}
+
+std::set<std::string> readInclude(const std::string &filename)
+{
+    std::set<std::string> list;
+    std::ifstream fp(filename);
+    assert(fp.is_open());
+    while (!fp.eof())
+    {
+        std::string s;
+        std::string tmp;
+        std::getline(fp, tmp);
+        for (size_t i = 0; i < tmp.length(); i++)
+        {
+            if (tmp.at(i) != ' ')
+            {
+                s += tmp.at(i);
+            }
+        }
+        if (s.find("#include") == 0 && s.find('\"') != std::string::npos)
+        {
+            std::size_t begin = s.find('\"') + 1;
+            std::size_t end = s.find('\"', begin);
+            list.insert(s.substr(begin, end - begin));
         }
     }
-    fprintf(fp, "clean:\n\tdel *.o\n\tdel *.exe\n");
-    fclose(fp);
+    fp.close();
+    return list;
+}
+
+void loadInclude()
+{
+    include.clear();
+    auto list = listdir(ALL_EXTENSION);
+    for (auto it = list.begin(); it != list.end(); it++)
+    {
+        loadInclude(*it);
+    }
     return;
 }
 
-inline const std::set<String> getDependence(const String &filename)
+void loadInclude(const std::string &filename)
 {
-    std::set<String> list;
-    std::ifstream fp(filename);
-    if (fp.is_open())
+    std::set<std::string> list = readInclude(filename);
+    std::vector<std::string> queue;
+    queue.assign(list.begin(), list.end());
+    list.clear();
+    while (!queue.empty())
     {
-        while (!fp.eof())
+        const std::string name = queue.back();
+        queue.pop_back();
+        if (!list.contains(name))
         {
-            std::size_t index = 0;
-            String s;
-            std::getline(fp, s);
-            while ((index = s.find(' ', index)) != String::npos)
+            list.insert(name);
+            if (!include.contains(name))
             {
-                s = s.erase(index, 1);
+                loadInclude(name);
             }
-            if (s.find("#include") == 0 && s.find('\"') != String::npos)
-            {
-                std::size_t begin = s.find('\"') + 1;
-                std::size_t end = s.find('\"', begin);
-                list.insert(s.substr(begin, end - begin));
-            }
+            queue.insert(queue.end(), include[name].begin(), include[name].end());
         }
-        fp.close();
-        return list;
     }
-    printf("Error At: %s %d.\n", __FILE__, __LINE__);
-    exit(0);
+    include[filename] = list;
+    return;
 }
 
-inline Integer getIndex(const std::vector<FileInfo> &list, const String &filename)
+void loadModule()
 {
-    for (Integer i = 0; i < (Integer)list.size(); i++)
+    std::set<std::string> list = findFile(main_file, SOURCE_EXTENSION);
+    assert(list.size() == 1);
+    const std::string filename = *list.begin();
+    for (auto it = include[filename].begin(); it != include[filename].end(); it++)
     {
-        if (list[i].fullname == filename)
+        std::set<std::string> tmp = findFile(splitExtension(*it).first, SOURCE_EXTENSION);
+        assert(tmp.size() <= 1);
+        if (!tmp.empty())
         {
-            return i;
+            source.merge(tmp);
         }
     }
-    return -1;
+    return;
 }
 
-const std::vector<FileInfo> readFileInfo()
+void saveModule()
 {
-    std::vector<String> list = listdir("./", EXTENSION);
-    std::vector<FileInfo> res;
-    for (Integer i = 0; i < (Integer)list.size(); i++)
+    const std::string fullname = *findFile(main_file, SOURCE_EXTENSION).begin();
+    std::cout << "Target: " << fullname << " -> " << target_file << std::endl;
+    if (!include[main_file].empty())
     {
-        res.push_back(FileInfo(list[i]));
+        std::cout << "Related: ";
+        for (auto jt = include[main_file].begin(); jt != include[main_file].end(); jt++)
+        {
+            std::cout << *jt << " ";
+        }
+        std::cout << std::endl;
     }
-    for (Integer i = 0; i < (Integer)list.size(); i++)
+    std::cout << std::endl;
+    for (auto it = source.begin(); it != source.end(); it++)
     {
-        std::set<String> &dependence = res[i].dependence;
-        std::queue<String> queue;
-        for (auto it = dependence.begin(); it != dependence.end(); it++)
+        std::cout << "Module: " << *it << std::endl;
+        if (!include[*it].empty())
         {
-            queue.push(String(*it));
-            Integer index = getIndex(res, *it);
-            if (index != -1)
+            std::cout << "Related: ";
+            for (auto jt = include[*it].begin(); jt != include[*it].end(); jt++)
             {
-                const FileInfo &file_info = res.at(index);
-                for (auto it = file_info.dependence.begin(); it != file_info.dependence.end(); it++)
-                {
-                    queue.push(String(*it));
-                }
+                std::cout << *jt << " ";
             }
+            std::cout << std::endl;
         }
-        while (!queue.empty())
-        {
-            String s = queue.front();
-            queue.pop();
-            if (dependence.find(s) == dependence.end())
-            {
-                dependence.insert(s);
-                const FileInfo &file_info = res.at(getIndex(res, s));
-                for (auto it = file_info.dependence.begin(); it != file_info.dependence.end(); it++)
-                {
-                    queue.push(String(*it));
-                }
-            }
-        }
+        std::cout << std::endl;
     }
-    return res;
-}
 
-FileInfo::FileInfo(const String &filename)
-{
-    this->filename = splitExtension(filename);
-    this->dependence = getDependence(filename);
-    this->fullname = filename;
+    std::ofstream fp("Makefile", std::ios::out);
+    assert(fp.is_open());
+    fp << target_file << ": Makefile " << fullname;
+    for (auto it = source.begin(); it != source.end(); it++)
+    {
+        fp << " " << splitExtension(*it).first << ".o";
+    }
+    for (auto it = include[fullname].begin(); it != include[fullname].end(); it++)
+    {
+        fp << " " << *it;
+    }
+    fp << std::endl;
+    fp << "\tg++ " << fullname << " -o " << target_file << opts;
+    for (auto it = source.begin(); it != source.end(); it++)
+    {
+        fp << " " << splitExtension(*it).first << ".o";
+    }
+    fp << std::endl;
+    fp << std::endl;
+
+    for (auto it = source.begin(); it != source.end(); it++)
+    {
+        fp << splitExtension(*it).first << ".o: Makefile " << *it;
+        for (auto jt = include[*it].begin(); jt != include[*it].end(); jt++)
+        {
+            fp << " " << *jt;
+        }
+        fp << std::endl;
+        fp << "\tg++ -c " << *it << " -o " << splitExtension(*it).first << ".o" << opts;
+        fp << std::endl;
+        fp << std::endl;
+    }
+
+#ifdef __linux__
+    fp << "clean:\n\trm *.o\n\trm *.exe\n";
+#elif defined(_WIN32)
+    fp << "clean:\n\tdel *.o\n\tdel *.exe\n";
+#endif
+    fp.close();
+
+    return;
 }

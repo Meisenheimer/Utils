@@ -8,29 +8,59 @@ void parseArgs(const int argc, const char *argv[]);
 int main(const int argc, const char *argv[])
 {
     parseArgs(argc, argv);
-    writeFileInfo(readFileInfo());
+    loadInclude();
+    loadModule();
+    saveModule();
     return 0;
 }
 
 inline void parseArgs(const int argc, const char *argv[])
 {
-    if (argc < 4)
+    if (argc < 2)
     {
-        printf("Usage: makemake base_dir main_file target_file opts\n");
+        printf("Usage: makemake main_file [-d base_dir] [-o target_file] [opts]\n");
         exit(0);
     }
-    base_dir = argv[1];
-    main_file = argv[2];
-    target_file = argv[3];
-    opts = INIT_OPTS ? String(" -O2 -fopenmp -Wall -Wextra -static -std=c++20") : String("");
-    for (Integer i = 4; i < argc; i++)
+    std::pair<std::string, std::string> tmp = splitExtension(argv[1]);
+    main_file = tmp.first;
+    base_dir = "./";
+    target_file = "";
+    opts = "";
+    for (int i = 2; i < argc; i++)
     {
-        opts += " " + String(argv[i]);
+        if (strcmp(argv[i], "-d") == 0)
+        {
+            assert(base_dir == "./");
+            assert((i + 1) < argc);
+            base_dir = argv[i + 1];
+            i++;
+        }
+        else if (strcmp(argv[i], "-o") == 0)
+        {
+            assert(target_file == "");
+            assert((i + 1) < argc);
+            target_file = argv[i + 1];
+            i++;
+        }
+        else
+        {
+            opts.append(" ");
+            opts.append(argv[i]);
+        }
+    }
+    chdir(base_dir.c_str());
+    if (target_file == "")
+    {
+        target_file = main_file;
+    }
+    if (opts == "")
+    {
+        opts = DEFAULT_OPTS;
     }
     std::cout << "--base_dir = " << base_dir << std::endl;
     std::cout << "--main_file = " << main_file << std::endl;
     std::cout << "--target_file = " << target_file << std::endl;
     std::cout << "--opts = " << opts << std::endl;
-    chdir(base_dir.c_str());
+    std::cout << std::endl;
     return;
 }
