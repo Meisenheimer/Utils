@@ -14,7 +14,7 @@ namespace mw
     class Poisson;
 
     template <typename Int, typename Real>
-    Matrix<Int, Real> poissonSolver(const Matrix<Int, Real> &f,
+    Matrix<Int, Real> poissonSolver(const Matrix<Int, Real> &f, const Matrix<Int, Real> &g,
                                     const Matrix<Int, Real> &alpha, const Matrix<Int, Real> &beta,
                                     const Real &dx, const Real &dy);
 

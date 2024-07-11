@@ -11,7 +11,7 @@
 namespace mw
 {
     template <typename Int, typename Real>
-    Matrix<Int, Real> poissonSolver(const Matrix<Int, Real> &f,
+    Matrix<Int, Real> poissonSolver(const Matrix<Int, Real> &f, const Matrix<Int, Real> &g,
                                     const Matrix<Int, Real> &alpha, const Matrix<Int, Real> &beta,
                                     const Real &dx, const Real &dy)
     {
@@ -21,35 +21,42 @@ namespace mw
         {
             for (Int y = 0; y < f.height; y++, k++)
             {
+                b(k) = beta(x, y) * f(x, y);
+                A.insert(k, x + y * f.width) = -2.0 * beta(x, y) / (dx * dx) - 2.0 * beta(x, y) / (dy * dy);
                 if (x == 0)
                 {
-                    A.insert(k, x + y * f.width) = alpha(x, y) + beta(x, y) / dx;
-                    A.insert(k, x + 1 + y * f.width) = -beta(x, y) / dx;
+                    A.coeffRef(k, x + y * f.width) -= 2.0 * alpha(x, y) / dx;
+                    A.insert(k, (x + 1) + y * f.width) = 2.0 * beta(x, y) / (dx * dx);
+                    b(k) -= 2.0 * g(x, y) / dx;
                 }
-                else if (x == (f.width - 1))
+                else if (x == f.width - 1)
                 {
-                    A.insert(k, x + y * f.width) = alpha(x, y) + beta(x, y) / dx;
-                    A.insert(k, x - 1 + y * f.width) = -beta(x, y) / dx;
-                }
-                else if (y == 0)
-                {
-                    A.insert(k, x + y * f.width) = alpha(x, y) + beta(x, y) / dy;
-                    A.insert(k, x + (y + 1) * f.width) = -beta(x, y) / dy;
-                }
-                else if (y == (f.width - 1))
-                {
-                    A.insert(k, x + y * f.width) = alpha(x, y) + beta(x, y) / dy;
-                    A.insert(k, x + (y - 1) * f.width) = -beta(x, y) / dy;
+                    A.coeffRef(k, x + y * f.width) -= 2.0 * alpha(x, y) / dx;
+                    A.insert(k, (x - 1) + y * f.width) = 2.0 * beta(x, y) / (dx * dx);
+                    b(k) -= 2.0 * g(x, y) / dx;
                 }
                 else
                 {
-                    A.insert(k, x + y * f.width) = -2.0 / (dx * dx) - 2.0 / (dy * dy);
-                    A.insert(k, (x + 1) + y * f.width) = 1.0 / (dx * dx);
-                    A.insert(k, (x - 1) + y * f.width) = 1.0 / (dx * dx);
-                    A.insert(k, x + (y + 1) * f.width) = 1.0 / (dy * dy);
-                    A.insert(k, x + (y - 1) * f.width) = 1.0 / (dy * dy);
+                    A.insert(k, (x + 1) + y * f.width) = 1.0 * beta(x, y) / (dx * dx);
+                    A.insert(k, (x - 1) + y * f.width) = 1.0 * beta(x, y) / (dx * dx);
                 }
-                b(k) = f(x, y);
+                if (y == 0)
+                {
+                    A.coeffRef(k, x + y * f.width) -= 2.0 * alpha(x, y) / dy;
+                    A.insert(k, x + (y + 1) * f.width) = 2.0 * beta(x, y) / (dy * dy);
+                    b(k) -= 2.0 * g(x, y) / dy;
+                }
+                else if (y == f.height - 1)
+                {
+                    A.coeffRef(k, x + y * f.width) -= 2.0 * alpha(x, y) / dy;
+                    A.insert(k, x + (y - 1) * f.width) = 2.0 * beta(x, y) / (dy * dy);
+                    b(k) -= 2.0 * g(x, y) / dy;
+                }
+                else
+                {
+                    A.insert(k, x + (y + 1) * f.width) = 1.0 * beta(x, y) / (dy * dy);
+                    A.insert(k, x + (y - 1) * f.width) = 1.0 * beta(x, y) / (dy * dy);
+                }
             }
         }
         Eigen::SparseLU<Eigen::SparseMatrix<Real>, Eigen::COLAMDOrdering<int>> solver;
