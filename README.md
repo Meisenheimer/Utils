@@ -8,6 +8,7 @@ This repository contains some template (for LaTeX and Typst) and some programs (
 以下为简要说明：
 Followings are introductions:
 
+- ./Archive/ 逆向工程等特殊项目的记录文档。 Documents for special projects (e.g. Reverse engineering)
 - ./Template/ LaTeX和Typst模板。 Templates for LaTeX and Typst
 - ./CGviewer/ 一个实验性质的Qt安卓项目。 A experimental project fot Qt for android.
 - ./encode/ 一个基于Qt的加密/解密程序。 A encode/decode program based on Qt.
