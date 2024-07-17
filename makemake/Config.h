@@ -10,7 +10,8 @@
     printf("Error: %s %d\n", __FILE__, __LINE__); \
     exit(0);
 
-inline const std::string DEFAULT_OPTS = " -O2 -fopenmp -Wall -Wextra -static -std=c++20";
+inline const std::string DEFAULT_OPTS = " -O2 -fopenmp -Wall -Wextra -std=c++20";
+// inline const std::string DEFAULT_OPTS = " -O2 -fopenmp -Wall -Wextra -static -std=c++20";
 inline const std::set<std::string> HEADER_EXTENSION = {".h", ".hh", ".hpp", ".hxx"};
 inline const std::set<std::string> SOURCE_EXTENSION = {".c", ".cc", ".cpp", ".cxx"};
 inline const std::set<std::string> ALL_EXTENSION = []() -> std::set<std::string>
