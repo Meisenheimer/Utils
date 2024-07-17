@@ -90,6 +90,18 @@
 2. 将需要的补丁复制到目录中(copy命令)；
 3. 运行程序。
 
+参考脚本如下(脚本位置为pvzHE-Launcher.exe和补丁所在目录)：
+
+```bat
+#!/bin/bash
+echo off
+mkdir C:\Users\candy\AppData\Local\Temp\.tmpAAAAAA
+copy .\ddraw.dll C:\Users\candy\AppData\Local\Temp\.tmpAAAAAA\
+copy .\libwine.dll C:\Users\candy\AppData\Local\Temp\.tmpAAAAAA\
+copy .\wined3d.dll C:\Users\candy\AppData\Local\Temp\.tmpAAAAAA\
+.\pvzHE-Launcher.exe
+```
+
 经过 https://space.bilibili.com/21636445/ 测试，上述修改可以达成目标。
 
 **注意：其中针对movzx   eax, ds:byte_78C4958[edx]的修改中，由于该处的偏移地址将在程序运行时进行计算，因此不应修改为类似mov eax, 41h的指令否则在程序运行时将会在指令上加偏移导致错误，因此若不使用上述方法，可能会需要修改EXE文件头中的内容。**
