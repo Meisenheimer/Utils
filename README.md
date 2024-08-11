@@ -12,8 +12,9 @@ Followings are introductions:
 - ./Template/ LaTeX和Typst模板。 Templates for LaTeX and Typst
 - ./CGviewer/ 一个实验性质的Qt安卓项目。 A experimental project fot Qt for android.
 - ./encode/ 一个基于Qt的加密/解密程序。 A encode/decode program based on Qt.
-- ./Gomoku/ 一个基于EasyX的五子棋框架，用于决策程序测试。 A strategy test program for gomoku based on EasyX.
+- ./Gomoku/ 一个基于EGE的五子棋框架，用于决策程序测试。 A strategy test program for gomoku based on EasyX.
 - ./makemake/ 一个自动化生成Makefile的程序。 A program for creating the Makefile.
+- ./MinimalSurface/ 一个极小曲面的有限元求解程序。 A program for solving minimal surface problem.
 - ./PoissonEquation/ 二维矩形区域上的Poisson方程多重网格求解器。A 2D poisson equation solver by multigrid method over rectangle region.
 - ./qv/ 一个类似Dos系统下qv的文件编辑器。 A editor similar to qv in Dos system.
 - ./SceneEditor/ 一个基于Qt，用于生成并修改Json格式对话场景的程序。 A program based on Qt to generate and modify dialog scenes in Json format .
@@ -27,6 +28,6 @@ Please let me know if there are bugs or suggestions, and my email is zeyu.wang.0
 
 ## 依赖/Dependencies
 
-部分代码基于EasyX、Qt等库。
+部分代码基于EGE、Eigen、Autodiff、Qt等库。
 Some of the codes is based on libraries such as EasyX and Qt.
 
