@@ -144,16 +144,21 @@ int main()
                 }
             }
         }
-        for (Int i = 0; i < GRID_SIZE; i++)
+        constexpr Int OMP_N = 2;
+        for (Int omp_n = 0; omp_n < OMP_N; omp_n++)
         {
-            for (Int j = 0; j < GRID_SIZE; j++)
+#pragma omp parallel for
+            for (Int i = omp_n; i < GRID_SIZE; i += OMP_N)
             {
-                for (Int k = 0; k < 4; k++)
+                for (Int j = 0; j < GRID_SIZE; j++)
                 {
-                    grad(i, j) += Real(derivatives(tmp[k](i, j), wrt(v(i, j)))[0]);
-                    grad(i + 1, j) += Real(derivatives(tmp[k](i, j), wrt(v(i + 1, j)))[0]);
-                    grad(i, j + 1) += Real(derivatives(tmp[k](i, j), wrt(v(i, j + 1)))[0]);
-                    grad(i + 1, j + 1) += Real(derivatives(tmp[k](i, j), wrt(v(i + 1, j + 1)))[0]);
+                    for (Int k = 0; k < 4; k++)
+                    {
+                        grad(i, j) += Real(derivatives(tmp[k](i, j), wrt(v(i, j)))[0]);
+                        grad(i + 1, j) += Real(derivatives(tmp[k](i, j), wrt(v(i + 1, j)))[0]);
+                        grad(i, j + 1) += Real(derivatives(tmp[k](i, j), wrt(v(i, j + 1)))[0]);
+                        grad(i + 1, j + 1) += Real(derivatives(tmp[k](i, j), wrt(v(i + 1, j + 1)))[0]);
+                    }
                 }
             }
         }
