@@ -348,8 +348,8 @@
 }
 
 #let env(title, body, name: none, number: true) = {
-  v(1em, weak: true)
-  set text(size: FontSize.at("text"), weight: "bold")
+  v(2em, weak: true)
+  set text(size: FontSize.at("text"), weight: "bold", style: "normal")
   set par(first-line-indent: 0em, justify: true)
   title + " "
   if number == true {
@@ -359,8 +359,19 @@
   if name != none {
     " (" + name + ")"
   }
-  set text(size: FontSize.at("text"), weight: "regular")
+  set text(size: FontSize.at("text"), weight: "regular", style: "normal")
   " " + body
+  v(1em, weak: true)
+}
+
+#let proof(body) = {
+  v(1em, weak: true)
+  set text(size: FontSize.at("text"), weight: "bold")
+  set par(first-line-indent: 0em, justify: true)
+  set text(size: FontSize.at("text"), weight: "regular", style: "italic")
+  "Proof. "
+  set text(size: FontSize.at("text"), weight: "regular", style: "normal")
+  body + h(1fr) + $square.filled$
   v(2em, weak: true)
 }
 

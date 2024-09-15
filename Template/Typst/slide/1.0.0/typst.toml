@@ -1,0 +1,8 @@
+[package]
+name = "slide"
+version = "1.0.0"
+entrypoint = "slide.typ"
+
+authors = ["Zeyu Wang <zeyu.wang.0117@outlook.com>"]
+license = "MIT"
+description = "A slide template"

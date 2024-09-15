@@ -1,0 +1,8 @@
+[package]
+name = "book"
+version = "1.0.0"
+entrypoint = "book.typ"
+
+authors = ["Zeyu Wang <zeyu.wang.0117@outlook.com>"]
+license = "MIT"
+description = "A book template"

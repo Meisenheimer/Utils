@@ -111,6 +111,7 @@ void loadInclude(const std::string &filename)
     std::vector<std::string> queue;
     queue.assign(list.begin(), list.end());
     list.clear();
+    include[filename] = std::set<std::string>();
     while (!queue.empty())
     {
         const std::string name = queue.back();

@@ -1,0 +1,8 @@
+[package]
+name = "doc"
+version = "1.0.0"
+entrypoint = "doc.typ"
+
+authors = ["Zeyu Wang <zeyu.wang.0117@outlook.com>"]
+license = "MIT"
+description = "A doc template"

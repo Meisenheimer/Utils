@@ -4,13 +4,10 @@
   // CN: 初号: 42pt, 小初: 36pt, 一号: 26pt, 小一: 24pt, 二号: 22pt, 小二: 18pt, 三号: 16pt, 小三: 15pt, 四号: 14pt, 小四: 12pt, 五号: 10.5pt, 小五: 9pt, 六号: 7.5pt, 小六: 6.5pt, 七号: 5.5pt, 八号: 5pt,
   // article 17.28pt, 14.4pt, 12pt, 10.95pt, 10pt, 9pt, 8pt, 6pt.
   // article section, subsection, subsubsection, text, others
-  // book 24.88pt, 20.74pt, 17.28pt, 14.4pt, 12pt, 10.95pt, 10pt, 9pt, 8pt, 6pt.
-  // book part, chapter, section, subsection, subsubsection, text, others
-  "part": 24.88pt,
-  "level-1": 20.74pt,
-  "level-2": 17.28pt,
-  "level-3": 14.4pt,
-  "level-4": 12pt,
+  "level-1": 17.28pt,
+  "level-2": 14.4pt,
+  "level-3": 12pt,
+  "level-4": 10.95pt,
   "level-5": 10.95pt,
   "text": 10.95pt,
   "header": 14.4pt,
@@ -26,17 +23,15 @@
 #let FontItalic = ("New Computer Modern", "KaiTi")
 // "New Computer Modern", "Latin Modern Math", "Linux Libertine", "TeX Gyre Termes"
 
-#let doc(
+#let article(
   papersize: "a4", // 21(cm) * 29.7(cm)
   language: "en", // en, zh
-  show_outline: true,
   title: "",
   subtitle: none,
   authors: (),
   date: datetime.today(),
   abstract: none,
   keywords: none,
-  preface: none,
   fontfamily: FontNormal,
   bibliography_path: none,
   body,
@@ -77,7 +72,7 @@
   // Title Page
   set page(numbering: "A")
   align(center)[
-    #v(20em, weak: false)
+    #v(10em, weak: false)
     #text(2em, title) \
     #if subtitle != none [
       #text(1.2em, subtitle) \
@@ -179,39 +174,15 @@
         ]
       ]
     ]
-    #pagebreak(weak: true)
-  ]
-
-  // Preface
-  if preface != none [
-    #pagebreak(weak: true)
-    #if language == "en" [
-      #heading(
-        outlined: false,
-        bookmarked: true,
-        numbering: none,
-        [Preface])
-    ]
-    #if language == "zh" [
-      #heading(
-        outlined: false,
-        bookmarked: true,
-        numbering: none,
-        [前言])
-    ]
-    #preface
-    #pagebreak(weak: true)
   ]
 
   // Main body.
   show strong: set text(font: FontBold)
   show emph: set text(font: FontItalic)
-  set page(numbering: "i")
   set enum(numbering: "(1)", indent: 2em)
   set list(indent: 2em)
 
   counter("env").update((0, 0))
-  counter("part").update(0)
   set heading(numbering: "1.1 ")
   show heading: it => {
     let number = if it.numbering != none {
@@ -251,53 +222,6 @@
       v(FontSize.at("level-5"), weak: true)
     }
   }
-
-  // Outline
-  if show_outline == true [
-    #show heading: it => {
-      set par(first-line-indent: 0pt)
-      set text(size: FontSize.at("level-1"))
-      v(FontSize.at("level-1"), weak: true)
-      strong(it.body)
-      v(FontSize.at("level-2"), weak: true)
-    }
-    #show outline.entry.where(level: 1): it => {
-      v(FontSize.at("text"), weak: true)
-      strong(it)
-    }
-    #counter(page).update(1)
-    #pagebreak(weak: true)
-    #set text(size: FontSize.at("outline"))
-    #if language == "zh" [
-      #{
-        show heading: none
-        hide(
-          heading(
-            level: 1,
-            numbering: none,
-            outlined: false,
-            bookmarked: true,
-            "目录")
-        )
-      }
-      #outline(title: [目录], depth: 3, indent: 1.25em)
-    ]
-    #if language == "en" [
-      #{
-        show heading: none
-        hide(
-          heading(
-            level: 1,
-            numbering: none,
-            outlined: false,
-            bookmarked: true,
-            "Contents")
-        )
-      }
-      #outline(title: [Contents], depth: 3, indent: 1.25em)
-    ]
-    #pagebreak(weak: true)
-  ]
 
   // Body
   set page(numbering: "1")
@@ -361,23 +285,9 @@
   heading(level: level, numbering: none, supplement: none, outlined: true, bookmarked: true, title)
 }
 
-#let part(title) = {
-  pagebreak(weak: true)
-  counter("part").step()
-  align(center)[
-    #hide(heading(level: 1, numbering: none, outlined: true, bookmarked: true, title))
-    #v(20em, weak: true)
-    #set text(size: FontSize.at("part"), weight: "bold")
-    Part #counter("part").display("1") \
-    #v(1em, weak: true)
-    #title
-  ]
-  pagebreak(weak: true)
-}
-
 #let env(title, body, name: none, number: true) = {
-  v(1em, weak: true)
-  set text(size: FontSize.at("text"), weight: "bold")
+  v(2em, weak: true)
+  set text(size: FontSize.at("text"), weight: "bold", style: "normal")
   set par(first-line-indent: 0em, justify: true)
   title + " "
   if number == true {
@@ -387,8 +297,18 @@
   if name != none {
     " (" + name + ")"
   }
-  set text(size: FontSize.at("text"), weight: "regular")
+  set text(size: FontSize.at("text"), weight: "regular", style: "normal")
   " " + body
+}
+
+#let proof(body) = {
+  v(1em, weak: true)
+  set text(size: FontSize.at("text"), weight: "bold")
+  set par(first-line-indent: 0em, justify: true)
+  set text(size: FontSize.at("text"), weight: "regular", style: "italic")
+  "Proof. "
+  set text(size: FontSize.at("text"), weight: "regular", style: "normal")
+  body + h(1fr) + $square.filled$
   v(2em, weak: true)
 }
 
