@@ -1,0 +1,8 @@
+[package]
+name = "math"
+version = "1.0.0"
+entrypoint = "math.typ"
+
+authors = ["Zeyu Wang <zeyu.wang.0117@outlook.com>"]
+license = "MIT"
+description = "Some math functions"

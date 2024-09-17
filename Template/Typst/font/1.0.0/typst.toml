@@ -1,0 +1,8 @@
+[package]
+name = "font"
+version = "1.0.0"
+entrypoint = "font.typ"
+
+authors = ["Zeyu Wang <zeyu.wang.0117@outlook.com>"]
+license = "MIT"
+description = "Definitions for font"
