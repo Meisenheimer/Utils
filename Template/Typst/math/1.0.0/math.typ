@@ -2,7 +2,7 @@
 
 #let env(title, body, name: none, number: true) = {
   v(2em, weak: true)
-  block(breakable: false)[
+  block(width: 100%, breakable: false)[
     #set text(size: FontSize.at("text"), weight: "bold", style: "normal")
     #set par(first-line-indent: 0em, justify: true)
     #title

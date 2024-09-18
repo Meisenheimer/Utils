@@ -1,0 +1,8 @@
+[package]
+name = "homework"
+version = "1.0.0"
+entrypoint = "homework.typ"
+
+authors = ["Zeyu Wang <zeyu.wang.0117@outlook.com>"]
+license = "MIT"
+description = "A homework template"
