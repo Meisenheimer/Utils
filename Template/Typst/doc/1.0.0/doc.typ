@@ -1,9 +1,13 @@
 #import "@local/font:1.0.0": *
 
+#let indent_size = ("zh": 2em, "en": 0em)
+#let title_page_numbering = ("article": "A", "book": "A", "homework": "1")
+
 #let doc(
+  documentclass: "article", // article, book, homework
   papersize: "a4", // 21(cm) * 29.7(cm)
   language: "en", // en, zh
-  show_outline: true,
+  show_outline: none,
   title: "",
   subtitle: none,
   authors: (),
@@ -21,22 +25,48 @@
     columns: 1,
     numbering: "1",
     number-align: center,
-    header: locate(loc => {
-      if counter(page).at(loc).first() > 1 [
-        #set text(size: FontSize.at("header"))
-        #title
-        #h(1fr)
-        #if language == "en" [
-          #date.display("[month repr:long] [day], [year]")
+    header: [
+      #set par(spacing: 0.5em)
+      #context [
+        #if counter(page).get().first() >= 2 [
+          #if documentclass == "article" [
+            #set text(size: FontSize.at("header"))
+            #title
+            #h(1fr)
+            #if language == "en" [
+                #date.display("[month repr:long] [day], [year]")
+            ]
+            #if language == "zh" [
+                #date.display("[year]年[month]月[day]日")
+            ]
+            #line(length: 100%)
+          ]
+          #if documentclass == "book" [
+            #set text(size: FontSize.at("header"))
+            #set align(center)
+            #title
+            #line(length: 100%)
+          ]
+          #if documentclass == "homework" [
+            #set text(size: FontSize.at("header"))
+            #title
+            #h(1fr)
+            #if language == "en" [
+                #date.display("[month repr:long] [day], [year]")
+            ]
+            #if language == "zh" [
+                #date.display("[year]年[month]月[day]日")
+            ]
+            #line(length: 100%)
+          ]
         ]
-        #if language == "zh" [
-          #date.display("[year]年[month]月[day]日")
-        ]
-        #line(length: 100%)
-      ]}),
+      ]
+    ],
   )
   set text(font: fontfamily, lang: language, size: FontSize.at("text"))
-  show par: set block(above: 0.58em, below: 0.58em)
+
+  counter(page).update(1)
+  set par(justify: true, first-line-indent: indent_size.at(language))
 
   show heading: it => {
     set text(size: FontSize.at("text"), weight: "bold")
@@ -49,14 +79,39 @@
   }
 
   // Title Page
-  set page(numbering: "A")
+  set page(numbering: title_page_numbering.at(documentclass))
   align(center)[
-    #v(20em, weak: false)
-    #text(2em, title) \
-    #if subtitle != none [
+    #if documentclass == "article" [
+      #v(10em, weak: false)
+      #text(2em, title) \
+      #if subtitle != none [
       #text(1.2em, subtitle) \
+      ]
+      #v(2.5em, weak: true)
     ]
-    #v(2.5em, weak: true)
+    #if documentclass == "book" [
+      #show heading: none
+      #if language == "en" {
+          hide(heading(level: 1, numbering: none, outlined: false, bookmarked: true, "Cover"))
+      }
+      #if language == "zh" {
+          hide(heading(level: 1, numbering: none, outlined: false, bookmarked: true, "封面"))
+      }
+      #v(20em, weak: false)
+      #text(2em, title) \
+      #if subtitle != none [
+      #text(1.2em, subtitle) \
+      ]
+      #v(2.5em, weak: true)
+    ]
+    #if documentclass == "homework" [
+      #v(7.5em, weak: false)
+      #text(2em, title) \
+      #if subtitle != none [
+      #text(1.2em, subtitle) \
+      ]
+      #v(2.5em, weak: true)
+    ]
   ]
 
   let parse_authors(authors) = {
@@ -67,7 +122,7 @@
     for author in authors {
       if "affiliation" in author {
         if author.affiliation not in affiliations {
-          affiliations.push(author.affiliation)
+            affiliations.push(author.affiliation)
         }
         pos = affiliations.position(a => a == author.affiliation)
         author.insert("affiliation_parsed", pos)
@@ -78,7 +133,7 @@
       parsed_authors.push(author)
       if "corresponding" in author {
         if author.corresponding {
-          corresponding = author
+            corresponding = author
         }
       }
     }
@@ -118,10 +173,11 @@
     ]
     #v(5em, weak: true)
   ]
-  // set par(justify: true)
+
+  set par(justify: true, first-line-indent: indent_size.at(language))
 
   // Abstract & Keywords
-  if abstract != none [
+  if abstract != none and documentclass == "article" [
     #v(5em, weak: true)
     #if language == "en" [
       #heading(
@@ -144,10 +200,10 @@
           #v(1em, weak: true)
           #if keywords != none [
             #if language == "en" [
-              *Keywords:*  #keywords
+              *Keywords:*    #keywords
             ]
             #if language == "zh" [
-              *关键词：*  #keywords
+              *关键词：*    #keywords
             ]
           ]
         ]
@@ -157,7 +213,7 @@
   ]
 
   // Preface
-  if preface != none [
+  if preface != none and documentclass == "book" [
     #pagebreak(weak: true)
     #if language == "en" [
       #heading(
@@ -180,7 +236,6 @@
   // Main body.
   show strong: set text(font: FontBold)
   show emph: set text(font: FontItalic)
-  set page(numbering: "i")
   set enum(numbering: "(1)", indent: 2em)
   set list(indent: 2em)
 
@@ -188,46 +243,137 @@
   counter("part").update(0)
   set heading(numbering: "1.1 ")
   show heading: it => {
-    let number = if it.numbering != none {
-      counter(heading).display(it.numbering)
-      h(7pt, weak: true)
+    if documentclass == "article" {
+      let number = if it.numbering != none {
+        counter(heading).display(it.numbering)
+        h(7pt, weak: true)
+      }
+      set par(first-line-indent: 0pt)
+      if it.level == 1 {
+        counter("env").update(counter(heading).get())
+        set text(size: FontSize.at("level-1"))
+        v(FontSize.at("level-1"), weak: true)
+        number
+        strong(it.body)
+        v(FontSize.at("level-2"), weak: true)
+      } else if it.level == 2 {
+        set text(size: FontSize.at("level-2"))
+        v(FontSize.at("level-2"), weak: true)
+        number
+        strong(it.body)
+        v(FontSize.at("level-3"), weak: true)
+      } else if it.level == 3 {
+        set text(size: FontSize.at("level-3"))
+        v(FontSize.at("level-3"), weak: true)
+        number
+        strong(it.body)
+        v(FontSize.at("level-4"), weak: true)
+      } else if it.level == 4 {
+        set text(size: FontSize.at("level-4"))
+        v(FontSize.at("level-4"), weak: true)
+        number
+        strong(it.body)
+        v(FontSize.at("level-5"), weak: true)
+      } else {
+        set text(size: FontSize.at("level-5"))
+        v(FontSize.at("level-5"), weak: true)
+        strong(it.body)
+        v(FontSize.at("level-5"), weak: true)
+      }
     }
-    set par(first-line-indent: 0pt)
-    if it.level == 1 {
-      counter("env").update(counter(heading).get())
-      set text(size: FontSize.at("level-1"))
-      v(FontSize.at("level-1"), weak: true)
-      number
-      strong(it.body)
-      v(FontSize.at("level-2"), weak: true)
-    } else if it.level == 2 {
-      set text(size: FontSize.at("level-2"))
-      v(FontSize.at("level-2"), weak: true)
-      number
-      strong(it.body)
-      v(FontSize.at("level-3"), weak: true)
-    } else if it.level == 3 {
-      set text(size: FontSize.at("level-3"))
-      v(FontSize.at("level-3"), weak: true)
-      number
-      strong(it.body)
-      v(FontSize.at("level-4"), weak: true)
-    } else if it.level == 4 {
-      set text(size: FontSize.at("level-4"))
-      v(FontSize.at("level-4"), weak: true)
-      number
-      strong(it.body)
-      v(FontSize.at("level-5"), weak: true)
-    } else {
-      set text(size: FontSize.at("level-5"))
-      v(FontSize.at("level-5"), weak: true)
-      strong(it.body)
-      v(FontSize.at("level-5"), weak: true)
+    if documentclass == "book" {
+      let number = if it.numbering != none {
+        counter(heading).display(it.numbering)
+        h(7pt, weak: true)
+      }
+      set par(first-line-indent: 0pt)
+      if it.level == 1 {
+        pagebreak(weak: true)
+        counter("env").update(counter(heading).get())
+        set text(size: FontSize.at("level-1"))
+        v(FontSize.at("level-1"), weak: true)
+        if language == "en" {
+          "Chapter " + number + "\n"
+          v(FontSize.at("level-2"), weak: true)
+          strong(it.body)
+        }
+        if language == "zh" {
+          strong("第  ") + number + strong("章  ") + strong(it.body)
+        }
+        v(FontSize.at("level-2"), weak: true)
+      } else if it.level == 2 {
+        set text(size: FontSize.at("level-2"))
+        v(FontSize.at("level-2"), weak: true)
+        number
+        strong(it.body)
+        v(FontSize.at("level-3"), weak: true)
+      } else if it.level == 3 {
+        set text(size: FontSize.at("level-3"))
+        v(FontSize.at("level-3"), weak: true)
+        number
+        strong(it.body)
+        v(FontSize.at("level-4"), weak: true)
+      } else if it.level == 4 {
+        set text(size: FontSize.at("level-4"))
+        v(FontSize.at("level-4"), weak: true)
+        number
+        strong(it.body)
+        v(FontSize.at("level-5"), weak: true)
+      } else {
+        set text(size: FontSize.at("level-5"))
+        v(FontSize.at("level-5"), weak: true)
+        strong(it.body)
+        v(FontSize.at("level-5"), weak: true)
+      }
+    }
+    if documentclass == "homework" {
+      let number = if it.numbering != none {
+        counter(heading).display(it.numbering)
+        h(7pt, weak: true)
+      }
+      set par(first-line-indent: 0pt)
+      if it.level == 1 {
+        counter("env").update(counter(heading).get())
+        set text(size: FontSize.at("level-1"))
+        v(FontSize.at("level-1"), weak: true)
+        number
+        set text(size: FontSize.at("text"), weight: "bold", style: "normal")
+        it.body
+        v(FontSize.at("level-2"), weak: true)
+      } else if it.level == 2 {
+        set text(size: FontSize.at("level-2"))
+        v(FontSize.at("level-2"), weak: true)
+        number
+        set text(size: FontSize.at("text"), weight: "bold", style: "normal")
+        strong(it.body)
+        v(FontSize.at("level-3"), weak: true)
+      } else if it.level == 3 {
+        set text(size: FontSize.at("level-3"))
+        v(FontSize.at("level-3"), weak: true)
+        number
+        set text(size: FontSize.at("text"), weight: "bold", style: "normal")
+        strong(it.body)
+        v(FontSize.at("level-4"), weak: true)
+      } else if it.level == 4 {
+        set text(size: FontSize.at("level-4"))
+        v(FontSize.at("level-4"), weak: true)
+        number
+        set text(size: FontSize.at("text"), weight: "bold", style: "normal")
+        strong(it.body)
+        v(FontSize.at("level-5"), weak: true)
+      } else {
+        set text(size: FontSize.at("level-5"))
+        v(FontSize.at("level-5"), weak: true)
+        set text(size: FontSize.at("text"), weight: "bold", style: "normal")
+        strong(it.body)
+        v(FontSize.at("level-5"), weak: true)
+      }
     }
   }
 
   // Outline
   if show_outline == true [
+    #set page(numbering: "i")
     #show heading: it => {
       set par(first-line-indent: 0pt)
       set text(size: FontSize.at("level-1"))
@@ -245,28 +391,14 @@
     #if language == "zh" [
       #{
         show heading: none
-        hide(
-          heading(
-            level: 1,
-            numbering: none,
-            outlined: false,
-            bookmarked: true,
-            "目录")
-        )
+        hide(heading(level: 1, numbering: none, outlined: false, bookmarked: true, "目录"))
       }
       #outline(title: [目录], depth: 3, indent: 1.25em)
     ]
     #if language == "en" [
       #{
         show heading: none
-        hide(
-          heading(
-            level: 1,
-            numbering: none,
-            outlined: false,
-            bookmarked: true,
-            "Contents")
-        )
+        hide(heading(level: 1, numbering: none, outlined: false, bookmarked: true, "Contents"))
       }
       #outline(title: [Contents], depth: 3, indent: 1.25em)
     ]
@@ -274,10 +406,16 @@
   ]
 
   // Body
-  set page(numbering: "1")
-  counter(page).update(1)
-  set par(justify: true, first-line-indent: 2em)
-  body
+  if documentclass != "homework" {
+    set page(numbering: "1")
+    counter(page).update(1)
+    set par(justify: true, first-line-indent: indent_size.at(language))
+    body
+  } else {
+    counter(page).update(1)
+    set par(justify: true, first-line-indent: indent_size.at(language))
+    body
+  }
 
   // Bibliography
   if bibliography_path != none {
@@ -288,13 +426,13 @@
       strong(it.body)
       v(FontSize.at("level-2"), weak: true)
     }
-
     pagebreak(weak: true)
     if language == "zh" {
       bibliography(bibliography_path, title: "参考文献", style: "gb-7714-2015-numeric")
     }
     if language == "en" {
-      bibliography(bibliography_path, title: "Bibliography", style: "association-for-computing-machinery")
+      // bibliography(bibliography_path, title: "Bibliography", style: "association-for-computing-machinery")
+      bibliography(bibliography_path, title: "Bibliography", style: "springer-mathphys")
     }
     show bibliography: set block(spacing: 0.58em)
     show bibliography: set par(first-line-indent: 0em)
@@ -305,7 +443,6 @@
   show heading: it => {
     set par(first-line-indent: 0pt)
     if it.level == 1 {
-      counter("env").update(0)
       set text(size: FontSize.at("level-1"))
       v(FontSize.at("level-1"), weak: true)
       strong(it.body)
@@ -337,14 +474,16 @@
 
 #let part(title) = {
   pagebreak(weak: true)
-  counter("part").step()
-  align(center)[
-    #hide(heading(level: 1, numbering: none, outlined: true, bookmarked: true, title))
-    #v(20em, weak: true)
-    #set text(size: FontSize.at("part"), weight: "bold")
-    Part #counter("part").display("1") \
-    #v(1em, weak: true)
-    #title
-  ]
+  context {
+    counter("part").step()
+    align(center)[
+      #hide(heading(level: 1, numbering: none, outlined: true, bookmarked: true, title))
+      #v(20em, weak: true)
+      #set text(size: FontSize.at("part"), weight: "bold")
+      Part #counter("part").display("1") \
+      #v(1em, weak: true)
+      #title
+    ]
+  }
   pagebreak(weak: true)
 }

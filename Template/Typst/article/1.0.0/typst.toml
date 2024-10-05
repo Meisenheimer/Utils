@@ -1,8 +1,0 @@
-[package]
-name = "article"
-version = "1.0.0"
-entrypoint = "article.typ"
-
-authors = ["Zeyu Wang <zeyu.wang.0117@outlook.com>"]
-license = "MIT"
-description = "A article template"

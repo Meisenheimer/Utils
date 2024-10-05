@@ -1,8 +1,12 @@
 #import "doc.typ": *
+#import "@local/math:1.0.0": *
 
 #show: doc.with(
+  // documentclass: "article",
+  documentclass: "book",
+  // documentclass: "homework",
   title: "A Title is all you need",
-  language: "zh",
+  language: "en",
   show_outline: true,
   subtitle: none,
   authors: (
@@ -41,6 +45,11 @@
 #head("subtitle", level: 2)
 
 #head("subsubtitle", level: 3)
+
+#env("Theorem", name: "name")[] this
+#env("Theorem", name: "name")[this]
+#env("Theorem")[this]
+#env("Theorem")[this]
 
 中文测试
 
