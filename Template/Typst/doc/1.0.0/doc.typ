@@ -239,7 +239,7 @@
   set enum(numbering: "(1)", indent: 2em)
   set list(indent: 2em)
 
-  counter("env").update((0, 0))
+  counter("env").update((0, 1))
   counter("part").update(0)
   set heading(numbering: "1.1 ")
   show heading: it => {
@@ -251,6 +251,7 @@
       set par(first-line-indent: 0pt)
       if it.level == 1 {
         counter("env").update(counter(heading).get())
+        counter("env").step(level: 2)
         set text(size: FontSize.at("level-1"))
         v(FontSize.at("level-1"), weak: true)
         number
@@ -290,6 +291,7 @@
       if it.level == 1 {
         pagebreak(weak: true)
         counter("env").update(counter(heading).get())
+        counter("env").step(level: 2)
         set text(size: FontSize.at("level-1"))
         v(FontSize.at("level-1"), weak: true)
         if language == "en" {
@@ -334,6 +336,7 @@
       set par(first-line-indent: 0pt)
       if it.level == 1 {
         counter("env").update(counter(heading).get())
+        counter("env").step(level: 2)
         set text(size: FontSize.at("level-1"))
         v(FontSize.at("level-1"), weak: true)
         number
