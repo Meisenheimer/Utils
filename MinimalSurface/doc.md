@@ -3,8 +3,8 @@
 计算$\Omega = [0, 1] \times [0, 1]$上的极小曲面方程
 $$
 \frac{\partial}{\partial x} \left( \frac{\frac{\partial u}{\partial x}}{\sqrt{1 + \left( \frac{\partial u}{\partial x} \right)^2 + \left( \frac{\partial u}{\partial y} \right)^2}} \right) + \frac{\partial}{\partial y} \left( \frac{\frac{\partial u}{\partial y}}{\sqrt{1 + \left( \frac{\partial u}{\partial x} \right)^2 + \left( \frac{\partial u}{\partial y} \right)^2}} \right) = 0, \\
-u \big|_{\Gamma_1} = \tilde u \text{ (dirichlet boundary) }, \\
-\frac{\partial u}{\partial \mathbf{n}} \big|_{\Gamma_2} = 0 \text{ (free boundary) }, \\
+u \big|_{\Gamma_1} = \tilde u, \\
+\frac{\partial u}{\partial \mathbf{n}} \big|_{\Gamma_2} = 0, \\
 $$
 
 其中$\Gamma_1 \cap \Gamma_2 = \emptyset$，$\Gamma_1 \cup \Gamma_2 = \partial \Omega$。
