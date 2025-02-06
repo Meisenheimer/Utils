@@ -1,16 +1,19 @@
 #import "@local/font:1.0.0": *
 
-#let env(title, body, name: none, number: true) = {
+#let env(title, body, name: none, number: true, tag: none) = {
   v(2em, weak: true)
   context {
     block(width: 100%, breakable: true)[
-      #set text(size: FontSize.at("text"), weight: "bold", style: "normal")
       #set par(first-line-indent: 0em, justify: true)
-      #title
-      #if number == true {
-        counter("env").step(level: 2)
-        counter("env").display("1.")
-      }
+      #box[
+        #set text(size: FontSize.at("text"), weight: "bold", style: "normal")
+        #title
+        #if number == true {
+          counter("env").step(level: 2)
+          counter("env").display("1.")
+        }
+      ] #if tag != none {label(tag)}
+      #set text(size: FontSize.at("text"), weight: "bold", style: "normal")
       #if name != none {
         "(" + name + ")"
       }
@@ -49,4 +52,12 @@
 
 #let mathbf(body) = {
   $upright(bold(body))$
+}
+
+#let envref(label) = {
+  show ref: it => {
+    link(label)[#it.element]
+  }
+
+  ref(label)
 }
