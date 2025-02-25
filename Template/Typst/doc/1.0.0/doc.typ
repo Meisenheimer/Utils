@@ -409,6 +409,7 @@
   ]
 
   // Body
+  show math.equation: set block(breakable: true)
   if documentclass != "homework" {
     set page(numbering: "1")
     counter(page).update(1)
