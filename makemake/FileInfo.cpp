@@ -178,6 +178,12 @@ void saveModule()
 
     std::ofstream fp("Makefile", std::ios::out);
     assert(fp.is_open());
+    fp << "ifeq ($(OS), Windows_NT)" << std::endl;
+    fp << "\tRM = del" << std::endl;
+    fp << "else" << std::endl;
+    fp << "\tRM = rm" << std::endl;
+    fp << "endif" << std::endl
+       << std::endl;
     fp << target_file << ": Makefile " << fullname;
     for (auto it = source.begin(); it != source.end(); it++)
     {
@@ -209,11 +215,16 @@ void saveModule()
         fp << std::endl;
     }
 
-#ifdef __linux__
-    fp << "clean:\n\trm *.o\n\trm *.exe\n";
-#elif defined(_WIN32)
-    fp << "clean:\n\tdel *.o\n\tdel *.exe\n";
-#endif
+    fp << "clean:\n\t$(RM) *.exe\n";
+    if (!source.empty())
+    {
+        fp << "\t$(RM) *.o\n";
+    }
+    // #ifdef __linux__
+    //     fp << "clean:\n\trm *.o\n\trm *.exe\n";
+    // #elif defined(_WIN32)
+    //     fp << "clean:\n\tdel *.o\n\tdel *.exe\n";
+    // #endif
     fp.close();
 
     return;
