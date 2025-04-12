@@ -1,0 +1,15 @@
+ege:
+    -lgraphics
+    -lgdi32
+    -lgdiplus
+
+Eigen:
+    -O3
+    -mavx
+    -mfma
+    -march=native
+    
+    EIGEN_NO_DEBUG/NDEBUG
+    EIGEN_FAST_MATH
+    DEIGEN_DONT_PARALLELIZE
+    OMP_NUM_THREADS=n
