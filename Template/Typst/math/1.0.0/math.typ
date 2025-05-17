@@ -12,7 +12,8 @@
           counter("env").step(level: 2)
           counter("env").display("1.")
         }
-      ] #if tag != none {label(tag)}
+        #if tag != none {label(tag)}
+      ]
       #set text(size: FontSize.at("text"), weight: "bold", style: "normal")
       #if name != none {
         "(" + name + ")"
