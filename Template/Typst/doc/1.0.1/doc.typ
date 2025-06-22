@@ -504,6 +504,6 @@
 #let appendix(body) = {
   pagebreak(weak: true)
   counter(heading).update(0)
-  set heading(numbering: "A")
+  set heading(numbering: "A.1")
   body
 }
