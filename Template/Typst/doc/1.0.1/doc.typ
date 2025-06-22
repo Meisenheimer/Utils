@@ -1,7 +1,6 @@
 #import "@local/font:1.0.0": *
 
 #let indent_size = ("zh": 2em, "en": 0em)
-#let title_page_numbering = ("article": "A", "book": "A", "homework": "1")
 
 #let doc(
   documentclass: "article", // article, book, homework
@@ -79,10 +78,9 @@
   }
 
   // Title Page
-  set page(numbering: title_page_numbering.at(documentclass))
   align(center)[
     #if documentclass == "article" [
-      #v(10em, weak: false)
+      #v(6em, weak: false)
       #text(2em, title) \
       #if subtitle != none [
       #text(1.2em, subtitle) \
@@ -90,6 +88,7 @@
       #v(2.5em, weak: true)
     ]
     #if documentclass == "book" [
+      #set page(numbering: "A")
       #show heading: none
       #if language == "en" {
           hide(heading(level: 1, numbering: none, outlined: false, bookmarked: true, "Cover"))
@@ -410,12 +409,12 @@
 
   // Body
   show math.equation: set block(breakable: true)
-  set page(numbering: "1")
   if documentclass != "homework" {
     counter(page).update(1)
     set par(justify: true, first-line-indent: indent_size.at(language))
     body
   } else {
+    set page(numbering: "1")
     counter(page).update(1)
     set par(justify: true, first-line-indent: indent_size.at(language))
     body
@@ -485,4 +484,26 @@
     ]
   }
   pagebreak(weak: true)
+}
+
+#let reference(ref) = {
+  set page(numbering: "1")
+  show heading: it => {
+    set par(first-line-indent: 0pt)
+    set text(size: FontSize.at("level-1"))
+    v(FontSize.at("level-1"), weak: true)
+    strong(it.body)
+    v(FontSize.at("level-2"), weak: true)
+  }
+  pagebreak(weak: true)
+  ref
+  show bibliography: set block(spacing: 0.58em)
+  show bibliography: set par(first-line-indent: 0em)
+}
+
+#let appendix(body) = {
+  pagebreak(weak: true)
+  counter(heading).update(0)
+  set heading(numbering: "A")
+  body
 }
