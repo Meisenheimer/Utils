@@ -78,40 +78,6 @@
   }
 
   // Title Page
-  align(center)[
-    #if documentclass == "article" [
-      #v(6em, weak: false)
-      #text(2em, title) \
-      #if subtitle != none [
-      #text(1.2em, subtitle) \
-      ]
-      #v(2.5em, weak: true)
-    ]
-    #if documentclass == "book" [
-      #set page(numbering: "A")
-      #show heading: none
-      #if language == "en" {
-          hide(heading(level: 1, numbering: none, outlined: false, bookmarked: true, "Cover"))
-      }
-      #if language == "zh" {
-          hide(heading(level: 1, numbering: none, outlined: false, bookmarked: true, "封面"))
-      }
-      #v(20em, weak: false)
-      #text(2em, title) \
-      #if subtitle != none [
-      #text(1.2em, subtitle) \
-      ]
-      #v(2.5em, weak: true)
-    ]
-    #if documentclass == "homework" [
-      #v(7.5em, weak: false)
-      #text(2em, title) \
-      #if subtitle != none [
-      #text(1.2em, subtitle) \
-      ]
-      #v(2.5em, weak: true)
-    ]
-  ]
 
   let parse_authors(authors) = {
     let affiliations = ()
@@ -145,35 +111,73 @@
 
   let authors_parsed = parse_authors(authors)
 
-  // List Authors
-  pad(top: 0.3em, bottom: 0.3em, x: 2em, grid(
-    columns: (1fr,) * calc.min(3, authors_parsed.authors.len()),
-    gutter: 1em,
-    ..authors_parsed.authors.map(author => align(center)[
-      #set text(size: FontSize.at("author"))
-      #author.name
-      #if author.email != none [
-        #footnote[Email: #link("mailto:" + authors_parsed.corresponding.email, authors_parsed.corresponding.email)] \
+  let make_title = {
+    v(2.5em, weak: true)
+    // List Authors
+    pad(top: 0.3em, bottom: 0.3em, x: 2em, grid(
+      columns: (1fr,) * calc.min(3, authors_parsed.authors.len()),
+      gutter: 1em,
+      ..authors_parsed.authors.map(author => align(center)[
+        #set text(size: FontSize.at("author"))
+        #author.name
+        #if author.email != none [
+          #footnote[Email: #link("mailto:" + authors_parsed.corresponding.email, authors_parsed.corresponding.email)] \
+        ]
+        #if author.institude != none [
+          #set text(size: FontSize.at("institude"))
+          #author.institude
+        ]
+      ]),
+    ))
+
+    align(center)[
+      #v(2.5em, weak: true)
+      #if language == "en" [
+        #text(FontSize.at("date"), date.display("[month repr:long] [day], [year]"))
       ]
-      #if author.institude != none [
-        #set text(size: FontSize.at("institude"))
-        #author.institude
+      #if language == "zh" [
+        #text(FontSize.at("date"), date.display("[year]年[month]月[day]日"))
       ]
-    ]),
-  ))
+      #v(5em, weak: true)
+    ]
+
+    set par(justify: true, first-line-indent: indent_size.at(language))
+  }
 
   align(center)[
-    #v(2.5em, weak: true)
-    #if language == "en" [
-      #text(FontSize.at("date"), date.display("[month repr:long] [day], [year]"))
+    #if documentclass == "article" [
+      #v(6em, weak: false)
+      #text(2em, title) \
+      #if subtitle != none [
+      #text(1.2em, subtitle) \
+      ]
+      #make_title
     ]
-    #if language == "zh" [
-      #text(FontSize.at("date"), date.display("[year]年[month]月[day]日"))
+    #if documentclass == "book" [
+      #set page(numbering: "A")
+      #show heading: none
+      #if language == "en" {
+          hide(heading(level: 1, numbering: none, outlined: false, bookmarked: true, "Cover"))
+      }
+      #if language == "zh" {
+          hide(heading(level: 1, numbering: none, outlined: false, bookmarked: true, "封面"))
+      }
+      #v(20em, weak: false)
+      #text(2em, title) \
+      #if subtitle != none [
+        #text(1.2em, subtitle) \
+      ]
+      #make_title
     ]
-    #v(5em, weak: true)
+    #if documentclass == "homework" [
+      #v(7.5em, weak: false)
+      #text(2em, title) \
+      #if subtitle != none [
+        #text(1.2em, subtitle) \
+      ]
+      #make_title
+    ]
   ]
-
-  set par(justify: true, first-line-indent: indent_size.at(language))
 
   // Abstract & Keywords
   if abstract != none and documentclass == "article" [
@@ -422,7 +426,6 @@
 
   // Bibliography
   if reference != none {
-    set page(numbering: "1")
     show heading: it => {
       set par(first-line-indent: 0pt)
       set text(size: FontSize.at("level-1"))
@@ -487,7 +490,6 @@
 }
 
 #let reference(ref) = {
-  set page(numbering: "1")
   show heading: it => {
     set par(first-line-indent: 0pt)
     set text(size: FontSize.at("level-1"))
@@ -495,7 +497,6 @@
     strong(it.body)
     v(FontSize.at("level-2"), weak: true)
   }
-  pagebreak(weak: true)
   ref
   show bibliography: set block(spacing: 0.58em)
   show bibliography: set par(first-line-indent: 0em)

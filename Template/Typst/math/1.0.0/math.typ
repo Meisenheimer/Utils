@@ -55,6 +55,11 @@
   $upright(bold(body))$
 }
 
+#let mathcal(body) = math.class("normal", box({
+  show math.equation: set text(font: "Garamond-Math", stylistic-set: 3)
+  $#math.cal(body)$
+}))
+
 #let envref(label) = {
   show ref: it => {
     link(label)[#it.element]
