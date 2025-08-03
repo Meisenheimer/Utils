@@ -1,0 +1,10 @@
+/mnt/d/Workspace/Projects/PoissonEquationDealII/CMakeFiles/main.dir
+/mnt/d/Workspace/Projects/PoissonEquationDealII/CMakeFiles/run.dir
+/mnt/d/Workspace/Projects/PoissonEquationDealII/CMakeFiles/debug.dir
+/mnt/d/Workspace/Projects/PoissonEquationDealII/CMakeFiles/release.dir
+/mnt/d/Workspace/Projects/PoissonEquationDealII/CMakeFiles/runclean.dir
+/mnt/d/Workspace/Projects/PoissonEquationDealII/CMakeFiles/distclean.dir
+/mnt/d/Workspace/Projects/PoissonEquationDealII/CMakeFiles/strip_comments.dir
+/mnt/d/Workspace/Projects/PoissonEquationDealII/CMakeFiles/info.dir
+/mnt/d/Workspace/Projects/PoissonEquationDealII/CMakeFiles/edit_cache.dir
+/mnt/d/Workspace/Projects/PoissonEquationDealII/CMakeFiles/rebuild_cache.dir
