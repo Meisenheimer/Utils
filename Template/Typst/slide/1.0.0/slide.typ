@@ -4,8 +4,8 @@
 #let FontSize = (
   "title": Height / 12,
   "subtitle": Height / 24,
-  "frame-title": Height / 12,
-  "text": Height / 18,
+  "frame-title": Height / 16,
+  "text": Height / 24,
   "footer": Height / 48,
   "author": Height / 24,
   "institude": Height / 32,
@@ -49,32 +49,38 @@
     header: context [],
     footer: context [
       #grid(
-        columns: (Width / 3, Width / 3, Width / 3),
-        rows: (7 * Height / 240, 7 * Height / 240, 7 * Height / 240),
+        columns: (Width / 4, Width / 2, 3 * Width / 16, Width / 16),
+        rows: (7 * Height / 240, 7 * Height / 240, 7 * Height / 240, 7 * Height / 240),
         box(
           align(center + horizon)[#text(size: FontSize.at("footer"), author, fill: Color.at("title"))],
           height: 7 * Height / 240,
-          width: Width / 3,
+          width: Width / 4,
           fill: Color.at("left")),
         box(
           align(center + horizon)[#text(size: FontSize.at("footer"), title, fill: Color.at("title"))],
           height: 7 * Height / 240,
-          width: Width / 3,
+          width: Width / 2,
           fill: Color.at("middle")),
         box(
           align(center + horizon)[#text(size: FontSize.at("footer"), Date.get(), fill: Color.at("title"))],
           height: 7 * Height / 240,
-          width: Width / 3,
+          width: 3 * Width / 16,
           fill: Color.at("right")),
+        box(
+          align(center + horizon)[#text(size: FontSize.at("footer"), counter(page).display("1 / 1", both: true), fill: Color.at("title"))],
+          height: 7 * Height / 240,
+          width: Width / 16,
+          fill: Color.at("right")),
+        )
       )
       // #move(dx: 0cm, dy: -Height / 15)[
-      #move(dx: 0cm, dy: -Height * 23 / 240)[
-        #box(
-          align(right + horizon)[#text(size: FontSize.at("footer"), counter(page).display("1 / 1", both: true), fill: Color.at("title"))],
-          height: 7 * Height / 240,
-          width: 63 * Width / 64,
-        )
-      ]
+      // #move(dx: 0cm, dy: -Height * 23 / 240)[
+      //   #box(
+      //     align(right + horizon)[#text(size: FontSize.at("footer"), counter(page).display("1 / 1", both: true), fill: Color.at("title"))],
+      //     height: 7 * Height / 240,
+      //     width: 63 * Width / 64,
+      //   )
+      // ]
     ]
   )
   set text(font: fontfamily, lang: language, size: FontSize.at("text"))
@@ -93,7 +99,7 @@
       #block(
         align(center + horizon)[#text(FontSize.at("title"), title, fill: Color.at("title"))],
         width: 0.9 * Width,
-        height: Height / 8,
+        height: Height / 6,
         fill: Color.at("title-back"),
         inset: Height / 32,
         radius: Height / 64,
@@ -176,8 +182,8 @@
   // Main body.
   show strong: set text(font: FontBold)
   show emph: set text(font: FontItalic)
-  set enum(numbering: "(1)", indent: 2em)
-  set list(indent: 2em)
+  set enum(numbering: "(1)", indent: 0em)
+  set list(indent: 0em)
 
   counter("env").update((0, 0))
   counter("part").update(0)
@@ -230,7 +236,7 @@
   pagebreak(weak: false)
   move(dx: 0cm, dy: -Height / 24)[
     #box(
-      align(left + horizon)[#text(size: FontSize.at("title"), "  " + title, fill: Color.at("title"))],
+      align(left + horizon)[#text(size: FontSize.at("frame-title"), "  " + title, fill: Color.at("title"))],
       height: Height / 8,
       width: Width,
       fill: Color.at("title-back")

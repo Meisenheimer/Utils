@@ -149,7 +149,7 @@
       #v(6em, weak: false)
       #text(2em, title) \
       #if subtitle != none [
-      #text(1.2em, subtitle) \
+        #text(1.2em, subtitle) \
       ]
       #make_title
     ]
@@ -157,10 +157,10 @@
       #set page(numbering: "A")
       #show heading: none
       #if language == "en" {
-          hide(heading(level: 1, numbering: none, outlined: false, bookmarked: true, "Cover"))
+        hide(heading(level: 1, numbering: none, outlined: false, bookmarked: true, "Cover"))
       }
       #if language == "zh" {
-          hide(heading(level: 1, numbering: none, outlined: false, bookmarked: true, "封面"))
+        hide(heading(level: 1, numbering: none, outlined: false, bookmarked: true, "封面"))
       }
       #v(20em, weak: false)
       #text(2em, title) \
@@ -332,45 +332,37 @@
       }
     }
     if documentclass == "homework" {
-      let number = if it.numbering != none {
-        counter(heading).display(it.numbering)
-        h(7pt, weak: true)
-      }
       set par(first-line-indent: 0pt)
       if it.level == 1 {
         counter("env").update(counter(heading).get())
         counter("env").step(level: 2)
         set text(size: FontSize.at("level-1"))
         v(FontSize.at("level-1"), weak: true)
-        number
-        set text(size: FontSize.at("text"), weight: "bold", style: "normal")
+        set text(size: FontSize.at("level-1"), weight: "bold", style: "normal")
         it.body
         v(FontSize.at("level-2"), weak: true)
       } else if it.level == 2 {
         set text(size: FontSize.at("level-2"))
         v(FontSize.at("level-2"), weak: true)
-        number
-        set text(size: FontSize.at("text"), weight: "bold", style: "normal")
+        set text(size: FontSize.at("level-2"), weight: "bold", style: "normal")
         strong(it.body)
         v(FontSize.at("level-3"), weak: true)
       } else if it.level == 3 {
         set text(size: FontSize.at("level-3"))
         v(FontSize.at("level-3"), weak: true)
-        number
-        set text(size: FontSize.at("text"), weight: "bold", style: "normal")
+        set text(size: FontSize.at("level-3"), weight: "bold", style: "normal")
         strong(it.body)
         v(FontSize.at("level-4"), weak: true)
       } else if it.level == 4 {
         set text(size: FontSize.at("level-4"))
         v(FontSize.at("level-4"), weak: true)
-        number
-        set text(size: FontSize.at("text"), weight: "bold", style: "normal")
+        set text(size: FontSize.at("level-4"), weight: "bold", style: "normal")
         strong(it.body)
         v(FontSize.at("level-5"), weak: true)
       } else {
         set text(size: FontSize.at("level-5"))
         v(FontSize.at("level-5"), weak: true)
-        set text(size: FontSize.at("text"), weight: "bold", style: "normal")
+        set text(size: FontSize.at("level-5"), weight: "bold", style: "normal")
         strong(it.body)
         v(FontSize.at("level-5"), weak: true)
       }
@@ -418,7 +410,6 @@
     set par(justify: true, first-line-indent: indent_size.at(language))
     body
   } else {
-    set page(numbering: "1")
     counter(page).update(1)
     set par(justify: true, first-line-indent: indent_size.at(language))
     body
