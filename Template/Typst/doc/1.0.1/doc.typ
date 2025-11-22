@@ -146,6 +146,9 @@
 
   align(center)[
     #if documentclass == "article" [
+      #if abstract == none [
+        #v(20em, weak: false)
+      ]
       #v(6em, weak: false)
       #text(2em, title) \
       #if subtitle != none [
